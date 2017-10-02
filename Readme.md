@@ -1,7 +1,7 @@
 # Личный проект «Угадай мелодию» [![Build status][travis-image]][travis-url]
 
 * Студент: [Вадим Шендер](https://up.htmlacademy.ru/ecmascript/3/user/210523).
-* Наставник: `Неизвестно`.
+* Наставник: [Саша Ивашкин](https://htmlacademy.ru/profile/id7280).
 
 ---
 
