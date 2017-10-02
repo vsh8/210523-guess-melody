@@ -1,29 +1,30 @@
 (() => {
-  const screenContainerElement = document.querySelector(`div.app`).querySelector(`section.main`);
+  const screenContainerElement = document.querySelector(`.app > .main`);
 
-  const templatesElement = document.querySelector(`template#templates`);
-  const gameScreenElements = templatesElement.content.querySelectorAll(`section.main`);
+  const templatesElement = document.querySelector(`#templates`);
+  const gameScreenElements = templatesElement.content.querySelectorAll(`.main`);
 
   const gameScreensOrdering = [0, 2, 1, 3, 4, 5];
 
-  const showGameScreen = (screenNumber) => {
-    while (screenContainerElement.firstChild) {
-      screenContainerElement.removeChild(screenContainerElement.firstChild);
-    }
+  const showGameScreen = (screenIdx) => {
+    screenContainerElement.innerHTML = ``;
 
-    const currentScreenElement = gameScreenElements[screenNumber].cloneNode(true);
+    const currentScreenElement = gameScreenElements[gameScreensOrdering[screenIdx]].cloneNode(true);
     screenContainerElement.appendChild(currentScreenElement);
   };
 
   let currentScreenIdx = 0;
-  showGameScreen(gameScreensOrdering[currentScreenIdx]);
+  showGameScreen(currentScreenIdx);
 
   document.addEventListener(`keydown`, (evt) => {
-    if (evt.code === `ArrowLeft` && evt.altKey && !evt.ctrlKey && !evt.shiftKey) {
-      currentScreenIdx = (currentScreenIdx + gameScreenElements.length - 1) % gameScreenElements.length;
-    } else if (evt.code === `ArrowRight` && evt.altKey && !evt.ctrlKey && !evt.shiftKey) {
-      currentScreenIdx = (currentScreenIdx + 1) % gameScreenElements.length;
+    if (evt.altKey && !evt.ctrlKey && !evt.shiftKey) {
+      if (evt.code === `ArrowLeft`) {
+        currentScreenIdx = (currentScreenIdx + gameScreensOrdering.length - 1) % gameScreensOrdering.length;
+        showGameScreen(currentScreenIdx);
+      } else if (evt.code === `ArrowRight`) {
+        currentScreenIdx = (currentScreenIdx + 1) % gameScreensOrdering.length;
+        showGameScreen(currentScreenIdx);
+      }
     }
-    showGameScreen(gameScreensOrdering[currentScreenIdx]);
   });
 })();
