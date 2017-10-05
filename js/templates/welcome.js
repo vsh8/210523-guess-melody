@@ -1,11 +1,9 @@
 // Приветствие
 
-import {getElementFromTemplate} from '../util';
+import {getElementFromTemplate, showGameScreen} from '../utils';
+import renderLevelArtistScreen from './level-artist';
 
-import showGameScreen from '../show-game-screen';
-import levelArtistScreen from './level-artist';
-
-const welcomeScreen = getElementFromTemplate(
+const welcomeScreenTemplate = getElementFromTemplate(
     `<section class="main main--welcome">
        <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
        <button class="main-play">Начать игру</button>
@@ -17,8 +15,12 @@ const welcomeScreen = getElementFromTemplate(
        </p>
      </section>`);
 
-welcomeScreen.querySelector(`.main-play`).addEventListener(`click`, () => {
-  showGameScreen(levelArtistScreen);
-});
+export default () => {
+  const welcomeScreen = welcomeScreenTemplate.cloneNode(true);
 
-export default welcomeScreen;
+  welcomeScreen.querySelector(`.main-play`).addEventListener(`click`, () => {
+    renderLevelArtistScreen();
+  });
+
+  showGameScreen(welcomeScreen);
+};

@@ -1,11 +1,9 @@
 // Игра на выбор исполнителя
 
-import {getElementFromTemplate} from '../util';
+import {getElementFromTemplate, showGameScreen} from '../utils';
+import renderLevelGenreScreen from './level-genre';
 
-import showGameScreen from '../show-game-screen';
-import levelGenreScreen from './level-genre';
-
-const levelArtistScreen = getElementFromTemplate(
+const levelArtistScreenTemplate = getElementFromTemplate(
     `<section class="main main--level main--level-artist">
        <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
          <circle
@@ -66,10 +64,14 @@ const levelArtistScreen = getElementFromTemplate(
        </div>
      </section>`);
 
-levelArtistScreen.querySelector(`.main-list`).addEventListener(`click`, (evt) => {
-  if (evt.target.tagName.toLowerCase() === `input`) {
-    showGameScreen(levelGenreScreen);
-  }
-});
+export default () => {
+  const levelArtistScreen = levelArtistScreenTemplate.cloneNode(true);
 
-export default levelArtistScreen;
+  levelArtistScreen.querySelector(`.main-list`).addEventListener(`click`, (evt) => {
+    if (evt.target.classList.contains(`main-answer-r`)) {
+      renderLevelGenreScreen();
+    }
+  });
+
+  showGameScreen(levelArtistScreen);
+};

@@ -1,9 +1,9 @@
-const randInt = (n) => {
+const getRandomInteger = (n) => {
   return Math.floor(n * Math.random());
 };
 
-const randChoice = (items) => {
-  return items[randInt(items.length)];
+const chooseRandomItem = (items) => {
+  return items[getRandomInteger(items.length)];
 };
 
-export {randInt, randChoice};
+export {getRandomInteger, chooseRandomItem};

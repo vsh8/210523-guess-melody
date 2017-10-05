@@ -1,11 +1,9 @@
 // Результат игры: проигрыш время вышло
 
-import {getElementFromTemplate} from '../util';
+import {getElementFromTemplate, showGameScreen} from '../utils';
+import renderWelcomeScreen from './welcome';
 
-import showGameScreen from '../show-game-screen';
-import welcomeScreen from './welcome';
-
-const resultFailureTimeoutScreen = getElementFromTemplate(
+const resultFailureTimeoutScreenTemplate = getElementFromTemplate(
     `<section class="main main--result">
        <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
 
@@ -14,8 +12,12 @@ const resultFailureTimeoutScreen = getElementFromTemplate(
        <span role="button" tabindex="0" class="main-replay">Попробовать ещё раз</span>
      </section>`);
 
-resultFailureTimeoutScreen.querySelector(`.main-replay`).addEventListener(`click`, () => {
-  showGameScreen(welcomeScreen);
-});
+export default () => {
+  const resultFailureTimeoutScreen = resultFailureTimeoutScreenTemplate.cloneNode(true);
 
-export default resultFailureTimeoutScreen;
+  resultFailureTimeoutScreen.querySelector(`.main-replay`).addEventListener(`click`, () => {
+    renderWelcomeScreen();
+  });
+
+  showGameScreen(resultFailureTimeoutScreen);
+};

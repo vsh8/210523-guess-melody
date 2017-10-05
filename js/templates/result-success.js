@@ -1,11 +1,9 @@
 // Результат игры: выигрыш
 
-import {getElementFromTemplate} from '../util';
+import {getElementFromTemplate, showGameScreen} from '../utils';
+import renderWelcomeScreen from './welcome';
 
-import showGameScreen from '../show-game-screen';
-import welcomeScreen from './welcome';
-
-const resultSuccessScreen = getElementFromTemplate(
+const resultSuccessScreenTemplate = getElementFromTemplate(
     `<section class="main main--result">
        <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
 
@@ -17,8 +15,12 @@ const resultSuccessScreen = getElementFromTemplate(
        <span role="button" tabindex="0" class="main-replay">Сыграть ещё раз</span>
      </section>`);
 
-resultSuccessScreen.querySelector(`.main-replay`).addEventListener(`click`, () => {
-  showGameScreen(welcomeScreen);
-});
+export default () => {
+  const resultSuccessScreen = resultSuccessScreenTemplate.cloneNode(true);
 
-export default resultSuccessScreen;
+  resultSuccessScreen.querySelector(`.main-replay`).addEventListener(`click`, () => {
+    renderWelcomeScreen();
+  });
+
+  showGameScreen(resultSuccessScreen);
+};

@@ -1,14 +1,12 @@
 // Игра на выбор жанра
 
-import {getElementFromTemplate} from '../util';
-import {randChoice} from '../rand';
+import {getElementFromTemplate, showGameScreen} from '../utils';
+import {chooseRandomItem} from '../rand';
+import renderResultSuccessScreen from './result-success';
+import renderResultFailureTimeoutScreen from './result-failure-timeout';
+import renderResultFailureAttemptsLimitScreen from './result-failure-attempts-limit';
 
-import showGameScreen from '../show-game-screen';
-import resultSuccessScreen from './result-success';
-import resultFailureTimeoutScreen from './result-failure-timeout';
-import resultFailureTimeoutAttemptsLimitScreen from './result-failure-attempts-limit';
-
-const levelGenreScreen = getElementFromTemplate(
+const levelGenreScreenTemplate = getElementFromTemplate(
     `<section class="main main--level main--level-genre">
        <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
          <circle
@@ -41,7 +39,7 @@ const levelGenreScreen = getElementFromTemplate(
                  </div>
                </div>
              </div>
-             <input type="checkbox" name="answer" value="answer-1" id="a-1">
+             <input class="genre-answer-cb" type="checkbox" name="answer" value="answer-1" id="a-1">
              <label class="genre-answer-check" for="a-1"></label>
            </div>
 
@@ -55,7 +53,7 @@ const levelGenreScreen = getElementFromTemplate(
                  </div>
                </div>
              </div>
-             <input type="checkbox" name="answer" value="answer-1" id="a-2">
+             <input class="genre-answer-cb" type="checkbox" name="answer" value="answer-1" id="a-2">
              <label class="genre-answer-check" for="a-2"></label>
            </div>
 
@@ -69,7 +67,7 @@ const levelGenreScreen = getElementFromTemplate(
                  </div>
                </div>
              </div>
-             <input type="checkbox" name="answer" value="answer-1" id="a-3">
+             <input class="genre-answer-cb" type="checkbox" name="answer" value="answer-1" id="a-3">
              <label class="genre-answer-check" for="a-3"></label>
            </div>
 
@@ -83,44 +81,38 @@ const levelGenreScreen = getElementFromTemplate(
                  </div>
                </div>
              </div>
-             <input type="checkbox" name="answer" value="answer-1" id="a-4">
+             <input class="genre-answer-cb" type="checkbox" name="answer" value="answer-1" id="a-4">
              <label class="genre-answer-check" for="a-4"></label>
            </div>
 
-           <button class="genre-answer-send" type="submit">Ответить</button>
+           <button class="genre-answer-send" disbled="true" type="submit">Ответить</button>
          </form>
        </div>
      </section>`);
 
-const nextScreens = [
-  resultSuccessScreen,
-  resultFailureTimeoutScreen,
-  resultFailureTimeoutAttemptsLimitScreen
+const nextScreenRenderers = [
+  renderResultSuccessScreen,
+  renderResultFailureTimeoutScreen,
+  renderResultFailureAttemptsLimitScreen,
 ];
 
-const genreFormElement = levelGenreScreen.querySelector(`.genre`);
-const genreAnswerSendButton = levelGenreScreen.querySelector(`.genre-answer-send`);
+export default () => {
+  const levelGenreScreen = levelGenreScreenTemplate.cloneNode(true);
 
-genreFormElement.addEventListener(`click`, (evt) => {
-  if (evt.target.tagName.toLowerCase() === `input` && evt.target.type === `checkbox`) {
-    const selectedTrackCheckboxes = genreFormElement.querySelectorAll(`input:checked`);
-    genreAnswerSendButton.disabled = selectedTrackCheckboxes.length === 0;
-  }
-});
+  const genreFormElement = levelGenreScreen.querySelector(`.genre`);
+  const genreAnswerSendButton = levelGenreScreen.querySelector(`.genre-answer-send`);
 
-genreAnswerSendButton.addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-
-  // Reset the screen to the initial state.
-  const selectedTrackCheckboxes = genreFormElement.querySelectorAll(`input:checked`);
-  Array.from(selectedTrackCheckboxes).forEach((checkbox) => {
-    checkbox.checked = false;
+  genreFormElement.addEventListener(`click`, (evt) => {
+    if (evt.target.classList.contains(`genre-answer-cb`)) {
+      const selectedTrackCheckboxes = genreFormElement.querySelectorAll(`.genre-answer-cb:checked`);
+      genreAnswerSendButton.disabled = selectedTrackCheckboxes.length === 0;
+    }
   });
-  genreAnswerSendButton.disabled = true;
 
-  const nextScreen = randChoice(nextScreens);
-  showGameScreen(nextScreen);
-});
-genreAnswerSendButton.disabled = true;
+  genreAnswerSendButton.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    chooseRandomItem(nextScreenRenderers)();
+  });
 
-export default levelGenreScreen;
+  showGameScreen(levelGenreScreen);
+};
