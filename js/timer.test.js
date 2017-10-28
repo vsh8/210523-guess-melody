@@ -8,9 +8,9 @@ describe(`Timer`, () => {
     it(`should tick ${i} times for the argument equals to ${i}`, () => {
       let t = createTimer(i);
       for (let j = i; j > 0; j--) {
-        assert.equal(j, t.tick());
+        assert.equal(true, t.tick());
       }
-      assert.equal(`time is over`, t.tick());
+      assert.equal(false, t.tick());
     });
   }
 });

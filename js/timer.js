@@ -3,9 +3,9 @@ export const createTimer = (counter) => {
     counter,
     tick() {
       if (this.counter > 0) {
-        return this.counter--;
+        return this.counter-- > 0;
       } else {
-        return `time is over`;
+        return false;
       }
     }
   };
