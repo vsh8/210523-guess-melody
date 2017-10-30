@@ -1,4 +1,4 @@
-import {inflectSingularNominativeNeuterNumber, inflectPluralGenitivePlayer} from './rulang.js';
+import {inflectSingularNominativeNeuterNumber, inflectPluralGenitivePlayer} from './rulang';
 
 
 export const calculateResultPoints = (answerTimes, wrongAnswersNumber) => {
@@ -25,10 +25,10 @@ export const calculateResultPoints = (answerTimes, wrongAnswersNumber) => {
 
 export const getResultMessage = (statistics, {resultPoints, wrongAnswersNumber, timeRemaining}) => {
   if (timeRemaining === 0) {
-    return `Время вышло! Вы не успели отгадать все мелодии.`;
+    return `Время вышло!<br>Вы не успели отгадать все мелодии.`;
   }
   if (wrongAnswersNumber > 3) {
-    return `У вас закончились все попытки. Ничего, повезёт в следующий раз!`;
+    return `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`;
   }
 
   statistics.sort((a, b) => b - a);

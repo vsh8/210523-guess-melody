@@ -1,3 +1,6 @@
+import {showGameScreen} from './utils';
+import {getInitialGameState} from './state';
 import renderWelcomeScreen from './templates/welcome';
 
-renderWelcomeScreen();
+
+showGameScreen(renderWelcomeScreen(getInitialGameState()));

@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import {calculateResultPoints, getResultMessage} from './results.js';
+import {calculateResultPoints, getResultMessage} from './results';
 
 
 describe(`Result points calculation function`, () => {
@@ -78,7 +78,7 @@ describe(`Result points calculation function`, () => {
 describe(`Result message getting function`, () => {
   it(`should say about timeout when no time remaining`, () => {
     assert.equal(
-        `Время вышло! Вы не успели отгадать все мелодии.`,
+        `Время вышло!<br>Вы не успели отгадать все мелодии.`,
         getResultMessage(
             [19, 18, 14, 10, 5, 6, 7, 12, 8], {
               resultPoints: 10,
@@ -88,7 +88,7 @@ describe(`Result message getting function`, () => {
   });
   it(`should say that number of attempts exceeded`, () => {
     assert.equal(
-        `У вас закончились все попытки. Ничего, повезёт в следующий раз!`,
+        `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`,
         getResultMessage(
             [19, 18, 14, 10, 5, 6, 7, 12, 8], {
               resultPoints: 10,
