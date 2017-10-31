@@ -1,6 +1,6 @@
 // Игра на выбор жанра
 
-import {getElementFromTemplate, showGameScreen, getCurrentScreen} from '../utils';
+import {getElementFromTemplate, changeView, getCurrentView} from '../util';
 import renderMistakes from './mistakes';
 
 
@@ -36,9 +36,8 @@ export default (gameState) => {
              --><span class="timer-value-secs">00</span>
            </div>
          </svg>
-         <div class="main-mistakes">
-           ${renderMistakes(gameState)}
-         </div>
+
+         ${renderMistakes(gameState)}
 
          <div class="main-wrap">
            <h2 class="title">Выберите ${currentQuestion.questionGenre} треки</h2>
@@ -50,29 +49,49 @@ export default (gameState) => {
          </div>
        </section>`);
 
+  const pauseAudio = (playerElement) => {
+    const playerAudio = playerElement.querySelector(`audio`);
+    const playerButton = playerElement.querySelector(`button`);
+
+    playerButton.classList.remove(`player-control--pause`);
+    playerButton.classList.add(`player-control--play`);
+    playerAudio.pause();
+  };
+
+  const playAudio = (playerElement) => {
+    const playerAudio = playerElement.querySelector(`audio`);
+    const playerButton = playerElement.querySelector(`button`);
+
+    playerButton.classList.remove(`player-control--play`);
+    playerButton.classList.add(`player-control--pause`);
+    playerAudio.play();
+  };
+
   levelGenreScreen.querySelector(`.genre`).addEventListener(`click`, (evt) => {
     if (evt.target.classList.contains(`player-control`)) {
       evt.preventDefault();
-      const playerAudio = evt.target.parentElement.querySelector(`audio`);
+
+      const playerAudio = evt.target.parentElement;
       if (evt.target.classList.contains(`player-control--play`)) {
-        evt.target.classList.remove(`player-control--play`);
-        evt.target.classList.add(`player-control--pause`);
-        playerAudio.play();
+        const playingAudioButton = levelGenreScreen.querySelector(`.player-control--pause`);
+        if (playingAudioButton) {
+          const playingPlayerElement = playingAudioButton.parentElement;
+          pauseAudio(playingPlayerElement);
+        }
+
+        playAudio(playerAudio);
       } else {
-        evt.target.classList.remove(`player-control--pause`);
-        evt.target.classList.add(`player-control--play`);
-        playerAudio.pause();
+        pauseAudio(playerAudio);
       }
     }
   });
 
-  const mistakesElement = levelGenreScreen.querySelector(`.main-mistakes`);
-  const genreFormElement = levelGenreScreen.querySelector(`.genre`);
+  const genreForm = levelGenreScreen.querySelector(`.genre`);
   const genreAnswerSendButton = levelGenreScreen.querySelector(`.genre-answer-send`);
 
-  genreFormElement.addEventListener(`click`, (evt) => {
+  genreForm.addEventListener(`click`, (evt) => {
     if (evt.target.classList.contains(`genre-answer-cb`)) {
-      const selectedTrackCheckboxes = genreFormElement.querySelectorAll(`.genre-answer-cb:checked`);
+      const selectedTrackCheckboxes = genreForm.querySelectorAll(`.genre-answer-cb:checked`);
       genreAnswerSendButton.disabled = selectedTrackCheckboxes.length === 0;
     }
   });
@@ -81,21 +100,11 @@ export default (gameState) => {
     evt.preventDefault();
 
     const selectedSongs = [];
-    genreFormElement.querySelectorAll(`.genre-answer-cb:checked`).forEach(
+    genreForm.querySelectorAll(`.genre-answer-cb:checked`).forEach(
         (checkboxElement) => selectedSongs.push(checkboxElement.value));
 
-    if (currentQuestion.checkAnswer(selectedSongs)) {
-      gameState.answerTimes.push(30);
-      showGameScreen(getCurrentScreen(gameState)(gameState));
-    } else {
-      gameState.wrongAnswersNumber++;
-      if (gameState.wrongAnswersNumber <= 3) {
-        mistakesElement.innerHTML = renderMistakes(gameState);
-      } else {
-        showGameScreen(getCurrentScreen(gameState)(gameState));
-      }
-    }
-
+    gameState.addAnswer(30, currentQuestion.checkAnswer(selectedSongs));
+    changeView(getCurrentView(gameState)(gameState));
   });
 
   return levelGenreScreen;

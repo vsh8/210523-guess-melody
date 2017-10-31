@@ -1,6 +1,6 @@
 // Игра на выбор исполнителя
 
-import {getElementFromTemplate, showGameScreen, getCurrentScreen} from '../utils';
+import {getElementFromTemplate, changeView, getCurrentView} from '../util';
 import renderMistakes from './mistakes';
 
 
@@ -16,6 +16,7 @@ const renderAnswerCase = (artist, idx) =>
 
 export default (gameState) => {
   const currentQuestion = gameState.currentQuestion;
+
   const levelArtistScreen = getElementFromTemplate(
       `<section class="main main--level main--level-artist">
          <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
@@ -30,9 +31,8 @@ export default (gameState) => {
              --><span class="timer-value-secs">00</span>
            </div>
          </svg>
-         <div class="main-mistakes">
-           ${renderMistakes(gameState)}
-         </div>
+
+         ${renderMistakes(gameState)}
 
          <div class="main-wrap">
            <h2 class="title main-title">Кто исполняет эту песню?</h2>
@@ -50,8 +50,6 @@ export default (gameState) => {
            </form>
          </div>
        </section>`);
-
-  const mistakesElement = levelArtistScreen.querySelector(`.main-mistakes`);
 
   levelArtistScreen.querySelector(`.player`).addEventListener(`click`, (evt) => {
     if (evt.target.classList.contains(`player-control`)) {
@@ -71,17 +69,8 @@ export default (gameState) => {
   levelArtistScreen.querySelector(`.main-list`).addEventListener(`click`, (evt) => {
     if (evt.target.classList.contains(`main-answer-r`)) {
       evt.preventDefault();
-      if (currentQuestion.checkAnswer(evt.target.value)) {
-        gameState.answerTimes.push(30);
-        showGameScreen(getCurrentScreen(gameState)(gameState));
-      } else {
-        gameState.wrongAnswersNumber++;
-        if (gameState.wrongAnswersNumber <= 3) {
-          mistakesElement.innerHTML = renderMistakes(gameState);
-        } else {
-          showGameScreen(getCurrentScreen(gameState)(gameState));
-        }
-      }
+      gameState.addAnswer(30, currentQuestion.checkAnswer(evt.target.value));
+      changeView(getCurrentView(gameState)(gameState));
     }
   });
 

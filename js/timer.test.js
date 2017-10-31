@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import {createTimer} from './timer';
+import createTimer from './timer';
 
 
 describe(`Timer`, () => {

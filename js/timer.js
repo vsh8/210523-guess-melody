@@ -1,4 +1,4 @@
-export const createTimer = (counter) => {
+export default (counter) => {
   return {
     counter,
     tick() {

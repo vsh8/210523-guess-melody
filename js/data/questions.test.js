@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import {ArtistQuestion, GenreQuestion, getInitialGameState} from './state';
+import {ArtistQuestion, GenreQuestion, generateQuestions, QUESTIONS_NUMBER} from './questions';
 
 
 describe(`ArtistQuestion`, () => {
@@ -38,7 +38,9 @@ describe(`ArtistQuestion`, () => {
 });
 
 describe(`GenreQuestion`, () => {
-  const genreQuestion = new GenreQuestion([
+  const genreQuestion = new GenreQuestion();
+  genreQuestion.questionGenre = `Rock`;
+  genreQuestion.songs = [
     {
       artist: `Muse`,
       name: `Knights of Cydonia`,
@@ -59,7 +61,7 @@ describe(`GenreQuestion`, () => {
       name: `Isis and Osiris`,
       genre: `Metal`
     },
-  ], `Rock`);
+  ];
 
   it(`should create a valid genre question`, () => {
     const genreQuestion2 = new GenreQuestion();
@@ -91,22 +93,16 @@ describe(`GenreQuestion`, () => {
   });
 });
 
-describe(`getInitialGameState`, () => {
-  it(`should return a valid initial state`, () => {
-    const gameState = getInitialGameState();
+describe(`genereateQuestions`, () => {
+  it(`should generate ${QUESTIONS_NUMBER} questions`, () => {
+    const questions = generateQuestions();
+    assert.equal(questions.length, QUESTIONS_NUMBER);
+  });
 
-    assert(`questions` in gameState);
-    assert(`time` in gameState);
-    assert(`answerTimes` in gameState);
-    assert(`wrongAnswersNumber` in gameState);
-
-    assert.equal(gameState.questions.length, 10);
-    for (const question of gameState.questions) {
+  it(`should generate valid questions`, () => {
+    const questions = generateQuestions();
+    for (const question of questions) {
       assert(question instanceof ArtistQuestion || question instanceof GenreQuestion);
     }
-
-    assert.equal(gameState.time, 300);
-    assert.equal(gameState.answerTimes.length, 0);
-    assert.equal(gameState.wrongAnswersNumber, 0);
   });
 });

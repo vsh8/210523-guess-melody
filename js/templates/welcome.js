@@ -1,6 +1,6 @@
 // Приветствие
 
-import {getElementFromTemplate, showGameScreen, getCurrentScreen} from '../utils';
+import {getElementFromTemplate, changeView, getCurrentView} from '../util';
 
 
 export default (gameState) => {
@@ -17,7 +17,7 @@ export default (gameState) => {
        </section>`);
 
   welcomeScreen.querySelector(`.main-play`).addEventListener(`click`, () => {
-    showGameScreen(getCurrentScreen(gameState)(gameState));
+    changeView(getCurrentView(gameState)(gameState));
   });
 
   return welcomeScreen;

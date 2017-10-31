@@ -1,17 +1,13 @@
 // Результат игры: проигрыш закончились попытки
 
-import {getElementFromTemplate, showGameScreen} from '../utils';
-import {getInitialGameState} from '../state';
+import {getElementFromTemplate, changeView} from '../util';
+import {getInitialGameState} from '../data/state';
 import {getResultMessage} from '../results';
 import renderWelcomeScreen from './welcome';
 
 
 export default (gameState) => {
-  const resultMessage = getResultMessage([], {
-    resultPoints: 0,
-    wrongAnswersNumber: gameState.wrongAnswersNumber,
-    timeRemainig: gameState.time
-  });
+  const resultMessage = getResultMessage([], gameState);
 
   const resultFailureAttemptsLimitScreen = getElementFromTemplate(
       `<section class="main main--result">
@@ -23,7 +19,7 @@ export default (gameState) => {
        </section>`);
 
   resultFailureAttemptsLimitScreen.querySelector(`.main-replay`).addEventListener(`click`, () => {
-    showGameScreen(renderWelcomeScreen(getInitialGameState()));
+    changeView(renderWelcomeScreen(getInitialGameState()));
   });
 
   return resultFailureAttemptsLimitScreen;
