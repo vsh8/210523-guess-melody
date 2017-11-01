@@ -1,9 +1,9 @@
 import assert from 'assert';
 
-import {inflectSingularNominativeNeuterNumber, inflectPluralGenitivePlayer} from './rulang.js';
+import {inflectSingularNominativeNeuterNumber, inflectPluralGenitivePlayer} from './rulang';
 
 
-describe(`inflectSingularNominativeNeuterNumber function`, () => {
+describe(`inflectSingularNominativeNeuterNumber`, () => {
   for (let [num, ending] of [
     [0, `ое`],
     [1, `ое`],

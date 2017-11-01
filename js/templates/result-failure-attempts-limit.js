@@ -1,23 +1,26 @@
 // Результат игры: проигрыш закончились попытки
 
-import {getElementFromTemplate, showGameScreen} from '../utils';
+import {getElementFromTemplate, changeView} from '../util';
+import {getInitialGameState} from '../data/state';
+import {getResultMessage} from '../results';
 import renderWelcomeScreen from './welcome';
 
-const resultFailureAttemptsLimitScreenTemplate = getElementFromTemplate(
-    `<section class="main main--result">
-       <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
 
-       <h2 class="title">Какая жалость!</h2>
-       <div class="main-stat">У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!</div>
-       <span role="button" tabindex="0" class="main-replay">Попробовать ещё раз</span>
-     </section>`);
+export default (gameState) => {
+  const resultMessage = getResultMessage([], gameState);
 
-export default () => {
-  const resultFailureAttemptsLimitScreen = resultFailureAttemptsLimitScreenTemplate.cloneNode(true);
+  const resultFailureAttemptsLimitScreen = getElementFromTemplate(
+      `<section class="main main--result">
+         <section class="logo" title="Угадай мелодию"><h1>Угадай мелодию</h1></section>
+
+         <h2 class="title">Какая жалость!</h2>
+         <div class="main-stat">${resultMessage}</div>
+         <span role="button" tabindex="0" class="main-replay">Попробовать ещё раз</span>
+       </section>`);
 
   resultFailureAttemptsLimitScreen.querySelector(`.main-replay`).addEventListener(`click`, () => {
-    renderWelcomeScreen();
+    changeView(renderWelcomeScreen(getInitialGameState()));
   });
 
-  showGameScreen(resultFailureAttemptsLimitScreen);
+  return resultFailureAttemptsLimitScreen;
 };
