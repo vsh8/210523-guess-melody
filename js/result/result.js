@@ -1,7 +1,8 @@
 import ResultView from './result-view';
 import getWelcomeView from '../welcome/welcome';
 
-import {showView, timeMinutes, timeSeconds} from '../util';
+import {showView} from '../util';
+import {timeMinutes, timeSeconds} from '../timer';
 
 import {GameStatus, getGameStatus} from '../game/game';
 import {QUESTIONS_NUMBER} from '../data/questions';

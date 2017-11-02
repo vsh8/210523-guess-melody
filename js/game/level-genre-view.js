@@ -1,5 +1,6 @@
 import LevelView from './level-view';
-import {timeMinutes, timeSeconds} from '../util';
+import {timeMinutes, timeSeconds, getVisualTimerCircleLength} from '../timer';
+import {TIME_LIMIT} from '../data/state';
 
 
 export default class LevelGenreView extends LevelView {
@@ -13,7 +14,9 @@ export default class LevelGenreView extends LevelView {
 
     return `
       <section class="main main--level main--level-genre">
-        <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780">
+        <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780"
+             stroke-dasharray="2325"
+             stroke-dashoffset="${getVisualTimerCircleLength(370, TIME_LIMIT, this.gameState.time)}">
           <circle
             cx="390" cy="390" r="370"
             class="timer-line"

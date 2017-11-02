@@ -10,17 +10,3 @@ export const showView = (view) => {
   mainContainerElement.innerHTML = ``;
   mainContainerElement.appendChild(view.element);
 };
-
-
-export const timeMinutes = (time) => {
-  return `0` + Math.floor(time / 60);
-};
-
-export const timeSeconds = (time) => {
-  const seconds = time % 60;
-  if (seconds >= 10) {
-    return `` + seconds;
-  } else {
-    return `0` + seconds;
-  }
-};
