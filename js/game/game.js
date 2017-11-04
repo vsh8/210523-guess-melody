@@ -10,8 +10,8 @@ import {GameStatus} from '../data/state';
 
 
 class GameScreen {
-  init(state) {
-    this.model = new GameModel(state);
+  init(gameState) {
+    this.model = new GameModel(gameState);
     this.changeLevel();
   }
 
@@ -32,11 +32,10 @@ class GameScreen {
 
   onAnswer(answer) {
     this.model.addAnswer(this.model.questionTime, this.model.currentQuestion.checkAnswer(answer));
-
     this.stopTimer();
 
     if (this.model.gameStatus === GameStatus.IN_PROGRESS) {
-      this.changeLevel();
+      App.showGame(this.model.state);
     } else {
       App.showStats(this.model.state);
     }

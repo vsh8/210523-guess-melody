@@ -11,7 +11,7 @@ class WelcomeScreen {
     this.view = new WelcomeView();
     showView(this.view);
     this.view.onStart = () => {
-      App.startGame(getInitialGameState());
+      App.showGame(getInitialGameState());
     };
   }
 
