@@ -1,78 +1,60 @@
-import LevelArtistView from './level-artist-view';
-import LevelGenreView from './level-genre-view';
-import getResultView from '../result/result';
-
+import App from '../application';
 import {showView} from '../util';
 
-import {ArtistQuestion, QUESTIONS_NUMBER} from '../data/questions';
-import {WRONG_ANSWERS_THRESHOLD} from '../data/state';
+import LevelArtistView from './level-artist-view';
+import LevelGenreView from './level-genre-view';
+import GameModel from './game-model';
+
+import {ArtistQuestion} from '../data/questions';
+import {GameStatus} from '../data/state';
 
 
-export const GameStatus = {
-  IN_PROGRESS: 0,
-  SUCCESS: 1,
-  TIME_LIMIT: 2,
-  WRONG_ANSWERS_LIMIT: 3
-};
-
-export const getGameStatus = (gameState) => {
-  if (gameState.gameTimer.counter === 0) {
-    return GameStatus.TIME_LIMIT;
-  } else if (gameState.wrongAnswersNumber > WRONG_ANSWERS_THRESHOLD) {
-    return GameStatus.WRONG_ANSWERS_LIMIT;
-  } else if (gameState.answers.length >= QUESTIONS_NUMBER) {
-    return GameStatus.SUCCESS;
-  } else {
-    return GameStatus.IN_PROGRESS;
+class GameScreen {
+  init(state) {
+    this.model = new GameModel(state);
+    this.changeLevel();
   }
-};
 
+  changeLevel() {
+    this.model.resetQuestionStartTime();
 
-const changeView = (gameState) => {
-  gameState.currentQuestionStartTime = gameState.gameTimer.counter;
-
-  let currentView = null;
-
-  let timer;
-  const startTimer = () => {
-    timer = setTimeout(() => {
-      const timeout = !gameState.gameTimer.tick();
-      if (timeout) {
-        showView(getResultView(gameState));
-      } else {
-        currentView.updateTimer(gameState.gameTimer.counter);
-        startTimer();
-      }
-    }, 1000);
-  };
-  startTimer();
-
-  switch (getGameStatus(gameState)) {
-    case GameStatus.IN_PROGRESS: {
-      const currentQuestion = gameState.currentQuestion;
-      if (currentQuestion instanceof ArtistQuestion) {
-        currentView = new LevelArtistView(gameState);
-      } else {
-        currentView = new LevelGenreView(gameState);
-      }
-
-      currentView.onAnswer = function (answer) {
-        clearTimeout(timer);
-        gameState.addAnswer(
-            gameState.currentQuestionStartTime - gameState.gameTimer.counter,
-            currentQuestion.checkAnswer(answer));
-        changeView(gameState);
-      };
-
-      break;
+    if (this.model.currentQuestion instanceof ArtistQuestion) {
+      this.view = new LevelArtistView(this.model);
+    } else {
+      this.view = new LevelGenreView(this.model);
     }
 
-    default:
-      clearTimeout(timer);
-      currentView = getResultView(gameState);
+    showView(this.view);
+    this.view.onAnswer = (answer) => this.onAnswer(answer);
+
+    this.tick();
   }
 
-  showView(currentView);
-};
+  onAnswer(answer) {
+    this.model.addAnswer(this.model.questionTime, this.model.currentQuestion.checkAnswer(answer));
 
-export default (initialGameState) => changeView(initialGameState);
+    this.stopTimer();
+
+    if (this.model.gameStatus === GameStatus.IN_PROGRESS) {
+      this.changeLevel();
+    } else {
+      App.showStats(this.model.state);
+    }
+  }
+
+  tick() {
+    const timeout = !this.model.tick();
+    if (timeout) {
+      App.showStats(this.model.state);
+    } else {
+      this.view.updateTimer(this.model.time);
+      this.timer = setTimeout(() => this.tick(), 1000);
+    }
+  }
+
+  stopTimer() {
+    clearTimeout(this.timer);
+  }
+}
+
+export default new GameScreen();
