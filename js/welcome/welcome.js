@@ -14,7 +14,6 @@ class WelcomeScreen {
       App.showGame(getInitialGameState());
     };
   }
-
 }
 
 export default new WelcomeScreen();

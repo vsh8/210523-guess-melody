@@ -1,5 +1,5 @@
 import welcomeScreen from './welcome/welcome';
-import gameScreen from './game/game';
+import GameScreen from './game/game';
 import resultScreen from './result/result';
 
 import {GameState, getInitialGameState} from './data/state';
@@ -9,12 +9,6 @@ const ControllerId = {
   WELCOME: ``,
   GAME: `game`,
   RESULT: `result`
-};
-
-const routes = {
-  [ControllerId.WELCOME]: welcomeScreen,
-  [ControllerId.GAME]: gameScreen,
-  [ControllerId.RESULT]: resultScreen
 };
 
 
@@ -32,7 +26,13 @@ const loadState = (dataString) => {
 
 
 export default class Application {
-  static init() {
+  static init(questions) {
+    this.routes = {
+      [ControllerId.WELCOME]: welcomeScreen,
+      [ControllerId.GAME]: new GameScreen(questions),
+      [ControllerId.RESULT]: resultScreen
+    };
+
     const hashChangeHandler = () => {
       const hashValue = location.hash.replace(`#`, ``);
       const [id, data] = hashValue.split(`?`);
@@ -43,7 +43,7 @@ export default class Application {
   }
 
   static changeHash(id, data) {
-    const controller = routes[id];
+    const controller = this.routes[id];
     if (controller) {
       controller.init(loadState(data));
     }
@@ -61,5 +61,3 @@ export default class Application {
     location.hash = `${ControllerId.RESULT}?${dumpState(state)}`;
   }
 }
-
-// Application.init();

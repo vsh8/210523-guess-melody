@@ -5,9 +5,9 @@ import {TIME_LIMIT} from '../data/state';
 
 export default class LevelArtistView extends LevelView {
 
-  constructor(gameState) {
+  constructor(model) {
     super();
-    this.gameState = gameState;
+    this.model = model;
   }
 
   get template() {
@@ -15,26 +15,26 @@ export default class LevelArtistView extends LevelView {
       <section class="main main--level main--level-artist">
         <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780"
              stroke-dasharray="2325"
-             stroke-dashoffset="${getVisualTimerCircleLength(370, TIME_LIMIT, this.gameState.time)}">
+             stroke-dashoffset="${getVisualTimerCircleLength(370, TIME_LIMIT, this.model.time)}">
           <circle
             cx="390" cy="390" r="370"
             class="timer-line"
             style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
 
           <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
-            <span class="timer-value-mins">${timeMinutes(this.gameState.time)}</span><!--
+            <span class="timer-value-mins">${timeMinutes(this.model.time)}</span><!--
             --><span class="timer-value-dots">:</span><!--
-            --><span class="timer-value-secs">${timeSeconds(this.gameState.time)}</span>
+            --><span class="timer-value-secs">${timeSeconds(this.model.time)}</span>
           </div>
         </svg>
 
-        ${this.renderMistakes(this.gameState.wrongAnswersNumber)}
+        ${this.renderMistakes(this.model.wrongAnswersNumber)}
 
         <div class="main-wrap">
-          <h2 class="title main-title">Кто исполняет эту песню?</h2>
+          <h2 class="title main-title">${this.model.currentQuestion.question}</h2>
           <div class="player-wrapper">
             <div class="player">
-              <audio src="${this.gameState.currentQuestion.questionSong.src}" autoplay></audio>
+              <audio src="${this.model.currentQuestion.songSrc}" autoplay></audio>
               <button class="player-control player-control--pause"></button>
               <div class="player-track">
                 <span class="player-status"></span>
@@ -42,7 +42,7 @@ export default class LevelArtistView extends LevelView {
             </div>
           </div>
           <form class="main-list">
-            ${this.gameState.currentQuestion.artists.map((artist, idx) => this.renderAnswerCase(artist, idx))}
+            ${this.model.currentQuestion.answers.map((artist, idx) => this.renderAnswerCase(artist, idx))}
           </form>
         </div>
       </section>`;
@@ -51,11 +51,11 @@ export default class LevelArtistView extends LevelView {
   renderAnswerCase(artist, idx) {
     return `
       <div class="main-answer-wrapper">
-        <input class="main-answer-r" type="radio" id="answer-${idx}" name="answer" value="${artist.name}"/>
+        <input class="main-answer-r" type="radio" id="answer-${idx}" name="answer" value="${artist.title}"/>
         <label class="main-answer" for="answer-${idx}">
         <img class="main-answer-preview" width="134" height="134"
-             src="${artist.image}" alt="${artist.name}" >
-          ${artist.name}
+             src="${artist.image.url}" alt="${artist.title}" >
+          ${artist.title}
         </label>
       </div>`;
   }
