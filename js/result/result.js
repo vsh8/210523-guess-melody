@@ -6,7 +6,6 @@ import ResultView from './result-view';
 import {timeMinutes, timeSeconds} from '../timer';
 
 import {GameStatus, getGameStatus} from '../data/state';
-import {QUESTIONS_NUMBER} from '../data/questions';
 import {WRONG_ANSWERS_THRESHOLD, TIME_LIMIT, FAST_ANSWER_THRESHOLD} from '../data/state';
 import {inflectSingularNominativeNeuterNumber, inflectPluralGenitivePlayer} from '../rulang';
 
@@ -24,7 +23,7 @@ export class ResultScreen {
   }
 
   static calculateResultPoints(answers) {
-    if (answers.length < QUESTIONS_NUMBER) {
+    if (answers.length < 10) {
       return -1;
     }
 
@@ -52,7 +51,7 @@ export class ResultScreen {
   }
 
   static getResult(statistics, gameState) {
-    switch (getGameStatus(gameState)) {
+    switch (getGameStatus(gameState, 10)) {
       case GameStatus.TIME_LIMIT:
         return {
           message: `Увы и ах!`,

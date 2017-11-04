@@ -1,4 +1,4 @@
-import App from './application';
+import splashScreen from './splash/splash';
 
 
-App.init();
+splashScreen.init();

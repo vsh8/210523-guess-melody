@@ -5,13 +5,17 @@ import LevelArtistView from './level-artist-view';
 import LevelGenreView from './level-genre-view';
 import GameModel from './game-model';
 
-import {ArtistQuestion} from '../data/questions';
+import {ArtistQuestion, loadQuestion} from '../data/questions';
 import {GameStatus} from '../data/state';
 
 
-class GameScreen {
+export default class GameScreen {
+  constructor(questions) {
+    this.questions = questions.map((question) => loadQuestion(question));
+  }
+
   init(gameState) {
-    this.model = new GameModel(gameState);
+    this.model = new GameModel(this.questions, gameState);
     this.changeLevel();
   }
 
@@ -55,5 +59,3 @@ class GameScreen {
     clearTimeout(this.timer);
   }
 }
-
-export default new GameScreen();

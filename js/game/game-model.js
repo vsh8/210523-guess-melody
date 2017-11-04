@@ -2,12 +2,17 @@ import {getGameStatus} from '../data/state';
 
 
 export default class GameModel {
-  constructor(state) {
+  constructor(questions, state) {
+    this.questions = questions;
     this.state = state;
   }
 
   get currentQuestion() {
-    return this.state.currentQuestion;
+    return this.questions[this.state.answers.length];
+  }
+
+  get questionsNumber() {
+    return this.questions.length;
   }
 
   get wrongAnswersNumber() {
@@ -39,6 +44,6 @@ export default class GameModel {
   }
 
   get gameStatus() {
-    return getGameStatus(this.state);
+    return getGameStatus(this.state, this.questions.length);
   }
 }
