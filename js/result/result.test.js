@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import {ResultScreen} from './result';
+import {ResultScreen, calculateResultPoints} from './result';
 import {getInitialGameState} from '../data/state';
 
 
@@ -8,22 +8,22 @@ describe(`Result points calculation function`, () => {
   it(`should return -1 when less than 10 answers are given`, () => {
     assert.equal(
         -1,
-        ResultScreen.calculateResultPoints([]));
+        calculateResultPoints([], 42));
     assert.equal(
         -1,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
-        ]));
+        ]), 42);
     assert.equal(
         -1,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
-        ]));
+        ]), 42);
     assert.equal(
         -1,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
@@ -33,12 +33,12 @@ describe(`Result points calculation function`, () => {
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
-        ]));
+        ]), 42);
   });
   it(`should return -1 when more than 3 wrong answers are given`, () => {
     assert.equal(
         -1,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: false},
           {time: 10, isRight: true},
           {time: 10, isRight: false},
@@ -49,10 +49,10 @@ describe(`Result points calculation function`, () => {
           {time: 10, isRight: true},
           {time: 10, isRight: false},
           {time: 10, isRight: true},
-        ]));
+        ]), 42);
     assert.equal(
         -1,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: false},
           {time: 10, isRight: false},
           {time: 10, isRight: false},
@@ -63,13 +63,13 @@ describe(`Result points calculation function`, () => {
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
-        ]));
+        ]), 42);
 
   });
   it(`should return 20 points when all answers are right and fast`, () => {
     assert.equal(
         20,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
@@ -80,12 +80,12 @@ describe(`Result points calculation function`, () => {
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
-        ]));
+        ]), 42);
   });
   it(`should use only first 10 answers`, () => {
     assert.equal(
         20,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
@@ -101,12 +101,12 @@ describe(`Result points calculation function`, () => {
           {time: 42, isRight: true},
           {time: 42, isRight: true},
           {time: 42, isRight: true},
-        ]));
+        ]), 42);
   });
   it(`should return right result when both fast and slow answers are given`, () => {
     assert.equal(
         19,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
           {time: 11, isRight: true},
           {time: 12, isRight: true},
@@ -117,10 +117,10 @@ describe(`Result points calculation function`, () => {
           {time: 17, isRight: true},
           {time: 18, isRight: true},
           {time: 30, isRight: true},
-        ]));
+        ]), 42);
     assert.equal(
         18,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
           {time: 11, isRight: true},
           {time: 12, isRight: true},
@@ -131,10 +131,10 @@ describe(`Result points calculation function`, () => {
           {time: 17, isRight: true},
           {time: 30, isRight: true},
           {time: 30, isRight: true},
-        ]));
+        ]), 42);
     assert.equal(
         11,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
           {time: 30, isRight: true},
           {time: 31, isRight: true},
@@ -145,10 +145,10 @@ describe(`Result points calculation function`, () => {
           {time: 36, isRight: true},
           {time: 37, isRight: true},
           {time: 38, isRight: true},
-        ]));
+        ]), 42);
     assert.equal(
         10,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 30, isRight: true},
           {time: 31, isRight: true},
           {time: 32, isRight: true},
@@ -159,12 +159,12 @@ describe(`Result points calculation function`, () => {
           {time: 37, isRight: true},
           {time: 38, isRight: true},
           {time: 39, isRight: true},
-        ]));
+        ]), 42);
   });
   it(`should return right result when wrong answers are given`, () => {
     assert.equal(
         16,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
           {time: 11, isRight: true},
           {time: 12, isRight: false},
@@ -175,10 +175,10 @@ describe(`Result points calculation function`, () => {
           {time: 17, isRight: true},
           {time: 18, isRight: true},
           {time: 19, isRight: true},
-        ]));
+        ]), 42);
     assert.equal(
         12,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
           {time: 11, isRight: true},
           {time: 12, isRight: false},
@@ -189,10 +189,10 @@ describe(`Result points calculation function`, () => {
           {time: 17, isRight: true},
           {time: 18, isRight: false},
           {time: 19, isRight: true},
-        ]));
+        ]), 42);
     assert.equal(
         8,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 10, isRight: true},
           {time: 11, isRight: true},
           {time: 12, isRight: false},
@@ -203,12 +203,12 @@ describe(`Result points calculation function`, () => {
           {time: 17, isRight: true},
           {time: 18, isRight: false},
           {time: 19, isRight: false},
-        ]));
+        ]), 42);
   });
   it(`should return right result when all kind of answers are given`, () => {
     assert.equal(
         10,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 27, isRight: true},
           {time: 42, isRight: true},
           {time: 14, isRight: false},
@@ -219,10 +219,10 @@ describe(`Result points calculation function`, () => {
           {time: 42, isRight: true},
           {time: 19, isRight: true},
           {time: 64, isRight: false},
-        ]));
+        ]), 42);
     assert.equal(
         3,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 27, isRight: false},
           {time: 30, isRight: true},
           {time: 42, isRight: true},
@@ -233,10 +233,10 @@ describe(`Result points calculation function`, () => {
           {time: 29, isRight: true},
           {time: 7, isRight: true},
           {time: 37, isRight: true},
-        ]));
+        ]), 42);
     assert.equal(
         1,
-        ResultScreen.calculateResultPoints([
+        calculateResultPoints([
           {time: 30, isRight: false},
           {time: 31, isRight: false},
           {time: 32, isRight: false},
@@ -247,7 +247,7 @@ describe(`Result points calculation function`, () => {
           {time: 37, isRight: true},
           {time: 38, isRight: true},
           {time: 39, isRight: true},
-        ]));
+        ]), 42);
   });
 });
 
