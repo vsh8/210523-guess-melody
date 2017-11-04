@@ -13,12 +13,12 @@ const ControllerId = {
 
 
 const dumpState = (gameState) => {
-  return JSON.stringify(gameState.dump());
+  return btoa(JSON.stringify(gameState.dump()));
 };
 
 const loadState = (dataString) => {
   try {
-    return GameState.load(JSON.parse(dataString));
+    return GameState.load(JSON.parse(atob(dataString)));
   } catch (e) {
     return getInitialGameState();
   }
