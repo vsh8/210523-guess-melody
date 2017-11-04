@@ -65,15 +65,11 @@ export default class LevelArtistView extends LevelView {
 
     this.element.querySelector(`.player`).addEventListener(`click`, (evt) => {
       if (evt.target.classList.contains(`player-control`)) {
-        const playerAudio = evt.target.parentElement.querySelector(`audio`);
-        if (evt.target.classList.contains(`player-control--play`)) {
-          evt.target.classList.remove(`player-control--play`);
-          evt.target.classList.add(`player-control--pause`);
-          playerAudio.play();
+        const playerElement = evt.target.parentElement;
+        if (this.isAudioPlaying(playerElement)) {
+          this.playAudio(playerElement);
         } else {
-          evt.target.classList.remove(`player-control--pause`);
-          evt.target.classList.add(`player-control--play`);
-          playerAudio.pause();
+          this.pauseAudio(playerElement);
         }
       }
     });
@@ -84,6 +80,29 @@ export default class LevelArtistView extends LevelView {
         this.onAnswer(evt.target.value);
       }
     });
+  }
+
+  isAudioPlaying(playerElement) {
+    const playerButton = playerElement.querySelector(`button`);
+    return playerButton.classList.contains(`player-control--play`);
+  }
+
+  pauseAudio(playerElement) {
+    const playerAudio = playerElement.querySelector(`audio`);
+    const playerButton = playerElement.querySelector(`button`);
+
+    playerButton.classList.remove(`player-control--pause`);
+    playerButton.target.classList.add(`player-control--play`);
+    playerAudio.pause();
+  }
+
+  playAudio(playerElement) {
+    const playerAudio = playerElement.querySelector(`audio`);
+    const playerButton = playerElement.querySelector(`button`);
+
+    playerButton.classList.remove(`player-control--play`);
+    playerButton.classList.add(`player-control--pause`);
+    playerAudio.play();
   }
 
   // onAnswer(answer) {}

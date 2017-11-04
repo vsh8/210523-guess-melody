@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import {calculateResultPoints, getResult} from './result';
+import {ResultScreen} from './result';
 import {getInitialGameState} from '../data/state';
 
 
@@ -8,22 +8,22 @@ describe(`Result points calculation function`, () => {
   it(`should return -1 when less than 10 answers are given`, () => {
     assert.equal(
         -1,
-        calculateResultPoints([]));
+        ResultScreen.calculateResultPoints([]));
     assert.equal(
         -1,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
         ]));
     assert.equal(
         -1,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
         ]));
     assert.equal(
         -1,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
@@ -38,7 +38,7 @@ describe(`Result points calculation function`, () => {
   it(`should return -1 when more than 3 wrong answers are given`, () => {
     assert.equal(
         -1,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: false},
           {time: 10, isRight: true},
           {time: 10, isRight: false},
@@ -52,7 +52,7 @@ describe(`Result points calculation function`, () => {
         ]));
     assert.equal(
         -1,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: false},
           {time: 10, isRight: false},
           {time: 10, isRight: false},
@@ -69,7 +69,7 @@ describe(`Result points calculation function`, () => {
   it(`should return 20 points when all answers are right and fast`, () => {
     assert.equal(
         20,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
@@ -85,7 +85,7 @@ describe(`Result points calculation function`, () => {
   it(`should use only first 10 answers`, () => {
     assert.equal(
         20,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
           {time: 10, isRight: true},
           {time: 10, isRight: true},
@@ -106,7 +106,7 @@ describe(`Result points calculation function`, () => {
   it(`should return right result when both fast and slow answers are given`, () => {
     assert.equal(
         19,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
           {time: 11, isRight: true},
           {time: 12, isRight: true},
@@ -120,7 +120,7 @@ describe(`Result points calculation function`, () => {
         ]));
     assert.equal(
         18,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
           {time: 11, isRight: true},
           {time: 12, isRight: true},
@@ -134,7 +134,7 @@ describe(`Result points calculation function`, () => {
         ]));
     assert.equal(
         11,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
           {time: 30, isRight: true},
           {time: 31, isRight: true},
@@ -148,7 +148,7 @@ describe(`Result points calculation function`, () => {
         ]));
     assert.equal(
         10,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 30, isRight: true},
           {time: 31, isRight: true},
           {time: 32, isRight: true},
@@ -164,7 +164,7 @@ describe(`Result points calculation function`, () => {
   it(`should return right result when wrong answers are given`, () => {
     assert.equal(
         16,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
           {time: 11, isRight: true},
           {time: 12, isRight: false},
@@ -178,7 +178,7 @@ describe(`Result points calculation function`, () => {
         ]));
     assert.equal(
         12,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
           {time: 11, isRight: true},
           {time: 12, isRight: false},
@@ -192,7 +192,7 @@ describe(`Result points calculation function`, () => {
         ]));
     assert.equal(
         8,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 10, isRight: true},
           {time: 11, isRight: true},
           {time: 12, isRight: false},
@@ -208,7 +208,7 @@ describe(`Result points calculation function`, () => {
   it(`should return right result when all kind of answers are given`, () => {
     assert.equal(
         10,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 27, isRight: true},
           {time: 42, isRight: true},
           {time: 14, isRight: false},
@@ -222,7 +222,7 @@ describe(`Result points calculation function`, () => {
         ]));
     assert.equal(
         3,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 27, isRight: false},
           {time: 30, isRight: true},
           {time: 42, isRight: true},
@@ -236,7 +236,7 @@ describe(`Result points calculation function`, () => {
         ]));
     assert.equal(
         1,
-        calculateResultPoints([
+        ResultScreen.calculateResultPoints([
           {time: 30, isRight: false},
           {time: 31, isRight: false},
           {time: 32, isRight: false},
@@ -261,7 +261,7 @@ const getGameState = (gameTime, answers) => {
 
 describe(`Result message getting function`, () => {
   it(`should say about timeout when no time remaining`, () => {
-    const result = getResult(
+    const result = ResultScreen.getResult(
         [19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(0, [
           {time: 10, isRight: true},
@@ -277,7 +277,7 @@ describe(`Result message getting function`, () => {
 
   });
   it(`should say that number of attempts exceeded when no attempts remaining`, () => {
-    const result = getResult(
+    const result = ResultScreen.getResult(
         [19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: false},
@@ -294,7 +294,7 @@ describe(`Result message getting function`, () => {
     assert.equal(result.description, `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`);
   });
   it(`should return right message for successful result`, () => {
-    const result1 = getResult(
+    const result1 = ResultScreen.getResult(
         [19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -316,10 +316,10 @@ describe(`Result message getting function`, () => {
     assert.equal(result1.message, `Вы настоящий меломан!`);
     assert.equal(
         result1.description,
-        `За 00 минуты и 42 секунд<br>вы набрали 20 баллов (10 быстрых)<br>совершив 0 ошибки`);
+        `За 04 минуты и 18 секунд<br>вы набрали 20 баллов (10 быстрых)<br>совершив 0 ошибки`);
     assert.equal(result1.comparison, `Вы заняли 1-ое место из 10 игроков. Это лучше чем у 90% игроков.`);
 
-    const result2 = getResult(
+    const result2 = ResultScreen.getResult(
         [19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -336,10 +336,10 @@ describe(`Result message getting function`, () => {
     assert.equal(result2.message, `Вы настоящий меломан!`);
     assert.equal(
         result2.description,
-        `За 00 минуты и 42 секунд<br>вы набрали 19 баллов (9 быстрых)<br>совершив 0 ошибки`);
+        `За 04 минуты и 18 секунд<br>вы набрали 19 баллов (9 быстрых)<br>совершив 0 ошибки`);
     assert.equal(result2.comparison, `Вы заняли 2-ое место из 10 игроков. Это лучше чем у 80% игроков.`);
 
-    const result3 = getResult(
+    const result3 = ResultScreen.getResult(
         [19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -356,10 +356,10 @@ describe(`Result message getting function`, () => {
     assert.equal(result3.message, `Вы настоящий меломан!`);
     assert.equal(
         result3.description,
-        `За 00 минуты и 42 секунд<br>вы набрали 18 баллов (8 быстрых)<br>совершив 0 ошибки`);
+        `За 04 минуты и 18 секунд<br>вы набрали 18 баллов (8 быстрых)<br>совершив 0 ошибки`);
     assert.equal(result3.comparison, `Вы заняли 3-ье место из 10 игроков. Это лучше чем у 70% игроков.`);
 
-    const result4 = getResult(
+    const result4 = ResultScreen.getResult(
         [19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -376,10 +376,10 @@ describe(`Result message getting function`, () => {
     assert.equal(result4.message, `Вы настоящий меломан!`);
     assert.equal(
         result4.description,
-        `За 00 минуты и 42 секунд<br>вы набрали 16 баллов (9 быстрых)<br>совершив 1 ошибки`);
+        `За 04 минуты и 18 секунд<br>вы набрали 16 баллов (9 быстрых)<br>совершив 1 ошибки`);
     assert.equal(result4.comparison, `Вы заняли 3-ье место из 10 игроков. Это лучше чем у 70% игроков.`);
 
-    const result5 = getResult(
+    const result5 = ResultScreen.getResult(
         [19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -396,10 +396,10 @@ describe(`Result message getting function`, () => {
     assert.equal(result5.message, `Вы настоящий меломан!`);
     assert.equal(
         result5.description,
-        `За 00 минуты и 42 секунд<br>вы набрали 6 баллов (5 быстрых)<br>совершив 3 ошибки`);
+        `За 04 минуты и 18 секунд<br>вы набрали 6 баллов (5 быстрых)<br>совершив 3 ошибки`);
     assert.equal(result5.comparison, `Вы заняли 9-ое место из 10 игроков. Это лучше чем у 10% игроков.`);
 
-    const result6 = getResult(
+    const result6 = ResultScreen.getResult(
         [19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -416,10 +416,10 @@ describe(`Result message getting function`, () => {
     assert.equal(result6.message, `Вы настоящий меломан!`);
     assert.equal(
         result6.description,
-        `За 00 минуты и 42 секунд<br>вы набрали 5 баллов (4 быстрых)<br>совершив 3 ошибки`);
+        `За 04 минуты и 18 секунд<br>вы набрали 5 баллов (4 быстрых)<br>совершив 3 ошибки`);
     assert.equal(result6.comparison, `Вы заняли 10-ое место из 10 игроков. Это лучше чем у 0% игроков.`);
 
-    const result7 = getResult(
+    const result7 = ResultScreen.getResult(
         [],
         getGameState(42, [
           {time: 27, isRight: true},
@@ -436,10 +436,10 @@ describe(`Result message getting function`, () => {
     assert.equal(result7.message, `Вы настоящий меломан!`);
     assert.equal(
         result7.description,
-        `За 00 минуты и 42 секунд<br>вы набрали 10 баллов (6 быстрых)<br>совершив 2 ошибки`);
+        `За 04 минуты и 18 секунд<br>вы набрали 10 баллов (6 быстрых)<br>совершив 2 ошибки`);
     assert.equal(result7.comparison, `Вы заняли 1-ое место из 1 игрока. Это лучше чем у 0% игроков.`);
 
-    const result8 = getResult(
+    const result8 = ResultScreen.getResult(
         [8],
         getGameState(42, [
           {time: 27, isRight: true},
@@ -456,10 +456,10 @@ describe(`Result message getting function`, () => {
     assert.equal(result8.message, `Вы настоящий меломан!`);
     assert.equal(
         result8.description,
-        `За 00 минуты и 42 секунд<br>вы набрали 10 баллов (6 быстрых)<br>совершив 2 ошибки`);
+        `За 04 минуты и 18 секунд<br>вы набрали 10 баллов (6 быстрых)<br>совершив 2 ошибки`);
     assert.equal(result8.comparison, `Вы заняли 1-ое место из 2 игроков. Это лучше чем у 50% игроков.`);
 
-    const result9 = getResult(
+    const result9 = ResultScreen.getResult(
         [8, 20],
         getGameState(42, [
           {time: 27, isRight: true},
@@ -476,7 +476,7 @@ describe(`Result message getting function`, () => {
     assert.equal(result9.message, `Вы настоящий меломан!`);
     assert.equal(
         result9.description,
-        `За 00 минуты и 42 секунд<br>вы набрали 10 баллов (6 быстрых)<br>совершив 2 ошибки`);
+        `За 04 минуты и 18 секунд<br>вы набрали 10 баллов (6 быстрых)<br>совершив 2 ошибки`);
     assert.equal(result9.comparison, `Вы заняли 2-ое место из 3 игроков. Это лучше чем у 33.33% игроков.`);
   });
 });

@@ -1,12 +1,20 @@
-import {getInitialGameState} from '../data/state';
+import App from '../application';
+import {showView} from '../util';
+
 import WelcomeView from './welcome-view';
-import startGame from '../game/game';
+
+import {getInitialGameState} from '../data/state';
 
 
-const welcome = new WelcomeView();
-welcome.onStart = () => {
+class WelcomeScreen {
+  init() {
+    this.view = new WelcomeView();
+    showView(this.view);
+    this.view.onStart = () => {
+      App.startGame(getInitialGameState());
+    };
+  }
 
-  startGame(getInitialGameState());
-};
+}
 
-export default () => welcome;
+export default new WelcomeScreen();
