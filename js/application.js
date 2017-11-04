@@ -1,8 +1,10 @@
 import welcomeScreen from './welcome/welcome';
 import GameScreen from './game/game';
-import resultScreen from './result/result';
+import resultScreen, {calculateResultPoints} from './result/result';
 
 import {GameState, getInitialGameState} from './data/state';
+
+import Loader from './loader';
 
 
 const ControllerId = {
@@ -58,6 +60,8 @@ export default class Application {
   }
 
   static showStats(state) {
-    location.hash = `${ControllerId.RESULT}?${dumpState(state)}`;
+    Loader.saveResults({points: calculateResultPoints(state.answers, state.time)}).then(() => {
+      location.hash = `${ControllerId.RESULT}?${dumpState(state)}`;
+    });
   }
 }

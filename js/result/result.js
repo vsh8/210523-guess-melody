@@ -4,50 +4,53 @@ import {showView} from '../util';
 import ResultView from './result-view';
 
 import {timeMinutes, timeSeconds} from '../timer';
+import Loader from '../loader';
 
 import {GameStatus, getGameStatus} from '../data/state';
 import {WRONG_ANSWERS_THRESHOLD, TIME_LIMIT, FAST_ANSWER_THRESHOLD} from '../data/state';
 import {inflectSingularNominativeNeuterNumber, inflectPluralGenitivePlayer} from '../rulang';
 
 
-export class ResultScreen {
-  init(gameState) {
-    const statistics = [];
-    const gameResult = ResultScreen.getResult(statistics, gameState);
-
-    this.view = new ResultView(gameResult);
-    showView(this.view);
-    this.view.onNewGame = () => {
-      App.showWelcome();
-    };
+export const calculateResultPoints = (answers, gameTime) => {
+  if (answers.length < 10 || gameTime === 0) {
+    return -1;
   }
 
-  static calculateResultPoints(answers) {
-    if (answers.length < 10) {
-      return -1;
-    }
+  let points = 0;
+  let wrongAnswersNumber = 0;
 
-    let points = 0;
-    let wrongAnswersNumber = 0;
-
-    for (const {time, isRight} of answers.slice(0, 10)) {
-      if (isRight) {
+  for (const {time, isRight} of answers.slice(0, 10)) {
+    if (isRight) {
+      points++;
+      if (time < FAST_ANSWER_THRESHOLD) {
+        // Add a point for the fast answer.
         points++;
-        if (time < FAST_ANSWER_THRESHOLD) {
-          // Add a point for the fast answer.
-          points++;
-        }
-      } else {
-        // The cost of each wrong answer is 2 points.
-        points -= 2;
-        wrongAnswersNumber++;
-        if (wrongAnswersNumber > WRONG_ANSWERS_THRESHOLD) {
-          return -1;
-        }
+      }
+    } else {
+      // The cost of each wrong answer is 2 points.
+      points -= 2;
+      wrongAnswersNumber++;
+      if (wrongAnswersNumber > WRONG_ANSWERS_THRESHOLD) {
+        return -1;
       }
     }
+  }
 
-    return points;
+  return points;
+};
+
+export class ResultScreen {
+  init(gameState) {
+    Loader.loadResults().then((results) => {
+      const statistics = results.map((result) => result.points);
+      const gameResult = ResultScreen.getResult(statistics, gameState);
+
+      this.view = new ResultView(gameResult);
+      showView(this.view);
+      this.view.onNewGame = () => {
+        App.showWelcome();
+      };
+    });
   }
 
   static getResult(statistics, gameState) {
@@ -64,7 +67,7 @@ export class ResultScreen {
         };
       case GameStatus.SUCCESS: {
         const gameTime = TIME_LIMIT - gameState.time;
-        const resultPoints = ResultScreen.calculateResultPoints(gameState.answers);
+        const resultPoints = calculateResultPoints(gameState.answers, gameTime);
 
         statistics.sort((a, b) => b - a);
 
