@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import {getInitialGameState, TIME_LIMIT, GameState, GameStatus, getGameStatus} from './state';
+import GameState, {getInitialGameState, TIME_LIMIT, GameStatus, getGameStatus} from './state';
 
 
 const getGameState = (gameTime, answers) => {

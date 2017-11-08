@@ -6,7 +6,7 @@ export const TIME_LIMIT = 300;
 export const FAST_ANSWER_THRESHOLD = 30;
 
 
-export class GameState {
+export default class GameState {
   constructor(time, answers) {
     if (time || time === 0) {
       this.gameTimer = createTimer(time);

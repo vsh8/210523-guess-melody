@@ -2,7 +2,7 @@ import welcomeScreen from './welcome/welcome';
 import GameScreen from './game/game';
 import resultScreen, {calculateResultPoints} from './result/result';
 
-import {GameState, getInitialGameState} from './data/state';
+import GameState, {getInitialGameState} from './data/state';
 
 import Loader from './loader';
 

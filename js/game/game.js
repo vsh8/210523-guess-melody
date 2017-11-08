@@ -5,7 +5,8 @@ import LevelArtistView from './level-artist-view';
 import LevelGenreView from './level-genre-view';
 import GameModel from './game-model';
 
-import {ArtistQuestion, loadQuestion} from '../data/questions';
+import loadQuestion from '../data/questions';
+import ArtistQuestion from '../data/artist-question';
 import {GameStatus} from '../data/state';
 
 
