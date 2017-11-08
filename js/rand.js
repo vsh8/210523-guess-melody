@@ -1,5 +1,5 @@
-export const getRandomInteger = (n) => {
-  return Math.floor(n * Math.random());
+export const getRandomInteger = (upLimit) => {
+  return Math.floor(upLimit * Math.random());
 };
 
 export const chooseRandomItem = (items) => {
@@ -15,9 +15,9 @@ export const chooseRandomItems = (items, numberOfItemsToChoose) => {
   const choosedItems = [];
 
   for (let i = 0; i < numberOfItemsToChoose; i++) {
-    const itemIdx = getRandomInteger(itemsToChoose.length);
-    choosedItems.push(itemsToChoose[itemIdx]);
-    itemsToChoose.splice(itemIdx, 1);
+    const itemIndex = getRandomInteger(itemsToChoose.length);
+    choosedItems.push(itemsToChoose[itemIndex]);
+    itemsToChoose.splice(itemIndex, 1);
   }
 
   return choosedItems;

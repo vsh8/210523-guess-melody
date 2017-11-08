@@ -69,16 +69,15 @@ export class ResultScreen {
         const gameTime = TIME_LIMIT - gameState.time;
         const resultPoints = calculateResultPoints(gameState.answers, gameTime);
 
+        // Find the player's place.
         statistics.sort((a, b) => b - a);
-
         let place = 0;
         while (place <= statistics.length && statistics[place] >= resultPoints) {
           place++;
         }
 
-        let i = place;
-        let n = statistics.length;
-        let p = Math.round((statistics.length - place) / statistics.length * 10000) / 100;
+        let playersNumber = statistics.length;
+        let worsePlayersNumber = Math.round((statistics.length - place) / statistics.length * 10000) / 100;
 
         return {
           message: `Вы настоящий меломан!`,
@@ -86,8 +85,9 @@ export class ResultScreen {
             + `За ${timeMinutes(gameTime)} минуты и ${timeSeconds(gameTime)} секунд<br>`
             + `вы набрали ${resultPoints} баллов (${gameState.fastAnswersNumber} быстрых)<br>`
             + `совершив ${gameState.wrongAnswersNumber} ошибки`,
-          comparison: `Вы заняли ${inflectSingularNominativeNeuterNumber(i)} место из `
-            + `${n} ${inflectPluralGenitivePlayer(n)}. Это лучше чем у ${p}% игроков.`
+          comparison: `Вы заняли ${inflectSingularNominativeNeuterNumber(place)} место из `
+            + `${playersNumber} ${inflectPluralGenitivePlayer(playersNumber)}. `
+            + `Это лучше чем у ${worsePlayersNumber}% игроков.`
         };
       }
       default:
