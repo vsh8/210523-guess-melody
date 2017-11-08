@@ -19,6 +19,10 @@
   width: 35px;
 }
 
+input[type=checkbox].correct-answer + .genre-answer-check {
+  background-image: url("../img/icon-note-correct-answer.png");
+}
+
 input[type=checkbox]:checked + .genre-answer-check {
   background-image: url("../img/icon-note-active.png");
 }

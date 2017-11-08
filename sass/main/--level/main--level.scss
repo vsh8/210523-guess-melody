@@ -48,6 +48,12 @@ $preview-spacing: 11px;
   }
 }
 
+.correct-answer {
+  .main-answer-preview {
+    border-color: green;
+  }
+}
+
 .main-answer:active {
   .main-answer-preview {
     border-color: red;

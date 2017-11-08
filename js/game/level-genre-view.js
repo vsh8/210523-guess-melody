@@ -34,7 +34,8 @@ export default class LevelGenreView extends LevelView {
         <div class="main-wrap">
           <h2 class="title">${this.model.currentQuestion.question}</h2>
           <form class="genre">
-            ${this.model.currentQuestion.answers.map((song, idx) => this.renderAnswerCase(song, idx))}
+            ${this.model.currentQuestion.answers.map((song, idx) =>
+    this.renderAnswerCase(song, this.model.currentQuestion.genre, idx))}
 
             <button class="genre-answer-send" disabled="true" type="submit">Ответить</button>
           </form>
@@ -42,7 +43,7 @@ export default class LevelGenreView extends LevelView {
       </section>`;
   }
 
-  renderAnswerCase(song, idx) {
+  renderAnswerCase(song, answerGenre, idx) {
     return `
       <div class="genre-answer">
         <div class="player-wrapper">
@@ -54,7 +55,8 @@ export default class LevelGenreView extends LevelView {
             </div>
           </div>
         </div>
-        <input class="genre-answer-cb" type="checkbox" name="answer" value="${song.src}" id="a-${idx}">
+        <input class="genre-answer-cb${song.genre === answerGenre ? ` correct-answer` : ``}"
+               type="checkbox" name="answer" value="${song.src}" id="a-${idx}">
         <label class="genre-answer-check" for="a-${idx}"></label>
       </div>`;
   }

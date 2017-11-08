@@ -50,7 +50,7 @@ export default class LevelArtistView extends LevelView {
 
   renderAnswerCase(artist, idx) {
     return `
-      <div class="main-answer-wrapper">
+      <div class="main-answer-wrapper${artist.isCorrect ? ` correct-answer` : ``}">
         <input class="main-answer-r" type="radio" id="answer-${idx}" name="answer" value="${artist.title}"/>
         <label class="main-answer" for="answer-${idx}">
         <img class="main-answer-preview" width="134" height="134"
