@@ -1,6 +1,4 @@
 import LevelView from './level-view';
-import {timeMinutes, timeSeconds, getVisualTimerCircleLength} from '../timer';
-import {TIME_LIMIT} from '../data/state';
 
 
 export default class LevelGenreView extends LevelView {
@@ -10,36 +8,15 @@ export default class LevelGenreView extends LevelView {
     this.model = model;
   }
 
-  get template() {
+  renderBody() {
     return `
-      <section class="main main--level main--level-genre">
-        <svg xmlns="http://www.w3.org/2000/svg" class="timer" viewBox="0 0 780 780"
-             stroke-dasharray="2325"
-             stroke-dashoffset="${getVisualTimerCircleLength(370, TIME_LIMIT, this.model.time)}">
-          <circle
-            cx="390" cy="390" r="370"
-            class="timer-line"
-            style="filter: url(.#blur); transform: rotate(-90deg) scaleY(-1); transform-origin: center"></circle>
-        </svg>
-
-        <div class="timer-value" xmlns="http://www.w3.org/1999/xhtml">
-          <span class="timer-value-mins">${timeMinutes(this.model.time)}</span><!--
-          --><span class="timer-value-dots">:</span><!--
-          --><span class="timer-value-secs">${timeSeconds(this.model.time)}</span>
-        </div>
-
-        ${this.renderMistakes(this.model.wrongAnswersNumber)}
-
-        <div class="main-wrap">
-          <h2 class="title">${this.model.currentQuestion.question}</h2>
-          <form class="genre">
-            ${this.model.currentQuestion.answers.map((song, idx) =>
+      <h2 class="title">${this.model.currentQuestion.question}</h2>
+      <form class="genre">
+        ${this.model.currentQuestion.answers.map((song, idx) =>
     this.renderAnswerCase(song, this.model.currentQuestion.genre, idx))}
 
-            <button class="genre-answer-send" disabled="true" type="submit">Ответить</button>
-          </form>
-        </div>
-      </section>`;
+        <button class="genre-answer-send" disabled="true" type="submit">Ответить</button>
+      </form>`;
   }
 
   renderAnswerCase(song, answerGenre, idx) {

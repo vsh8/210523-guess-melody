@@ -64,7 +64,6 @@ export const getGameStatus = (gameState, questionsNumber) => {
     return GameStatus.WRONG_ANSWERS_LIMIT;
   } else if (gameState.answers.length >= questionsNumber) {
     return GameStatus.SUCCESS;
-  } else {
-    return GameStatus.IN_PROGRESS;
   }
+  return GameStatus.IN_PROGRESS;
 };

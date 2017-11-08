@@ -1,6 +1,7 @@
 import welcomeScreen from './welcome/welcome';
 import GameScreen from './game/game';
-import resultScreen, {calculateResultPoints} from './result/result';
+import resultScreen from './result/result';
+import {calculateResultPoints} from './result/result-model';
 
 import GameState, {getInitialGameState} from './data/state';
 
@@ -29,22 +30,20 @@ const loadState = (dataString) => {
 
 export default class Application {
   static init(questions) {
-    this.routes = {
+    Application.routes = {
       [ControllerId.WELCOME]: welcomeScreen,
       [ControllerId.GAME]: new GameScreen(questions),
       [ControllerId.RESULT]: resultScreen
     };
 
-    const hashChangeHandler = () => {
-      const hashValue = location.hash.replace(`#`, ``);
-      const [id, data] = hashValue.split(`?`);
-      this.changeHash(id, data);
-    };
-    window.onhashchange = hashChangeHandler;
-    hashChangeHandler();
+    window.addEventListener(`hashchange`, () => Application.changeHash());
+    Application.changeHash();
   }
 
-  static changeHash(id, data) {
+  static changeHash() {
+    const hashValue = location.hash.replace(`#`, ``);
+    const [id, data] = hashValue.split(`?`);
+
     const controller = this.routes[id];
     if (controller) {
       controller.init(loadState(data));

@@ -1,6 +1,7 @@
 import assert from 'assert';
 
-import {inflectSingularNominativeNeuterNumber, inflectPluralGenitivePlayer} from './rulang';
+import {inflectSingularNominativeNeuterNumber, inflectGenitivePlayer, inflectAccusativeNumber,
+  inflectAccusativeScore, inflectGenitiveFast, inflectAccusativeMistake} from './rulang';
 
 
 describe(`inflectSingularNominativeNeuterNumber`, () => {
@@ -33,7 +34,7 @@ describe(`inflectSingularNominativeNeuterNumber`, () => {
   }
 });
 
-describe(`inflectPluralGenitivePlayer`, () => {
+describe(`inflectGenitivePlayer`, () => {
   for (let [num, word] of [
     [0, `игроков`],
     [1, `игрока`],
@@ -56,7 +57,164 @@ describe(`inflectPluralGenitivePlayer`, () => {
     [1001, `игрока`],
   ]) {
     it(`should return right answer for ${num} players`, () => {
-      assert.equal(word, inflectPluralGenitivePlayer(num));
+      assert.equal(word, inflectGenitivePlayer(num));
+    });
+  }
+});
+
+describe(`inflectGenitveNumber`, () => {
+  for (let [num, baseWord, word] of [
+    [0, `минут`, `минут`],
+    [1, `минут`, `минуту`],
+    [2, `минут`, `минуты`],
+    [3, `минут`, `минуты`],
+    [4, `минут`, `минуты`],
+    [5, `минут`, `минут`],
+    [6, `минут`, `минут`],
+    [7, `минут`, `минут`],
+    [8, `минут`, `минут`],
+    [9, `минут`, `минут`],
+    [10, `минут`, `минут`],
+    [11, `минут`, `минут`],
+    [12, `минут`, `минут`],
+    [13, `минут`, `минут`],
+    [19, `минут`, `минут`],
+    [20, `минут`, `минут`],
+    [21, `минут`, `минуту`],
+    [22, `минут`, `минуты`],
+    [23, `минут`, `минуты`],
+    [24, `минут`, `минуты`],
+    [25, `минут`, `минут`],
+    [26, `минут`, `минут`],
+    [27, `минут`, `минут`],
+    [28, `минут`, `минут`],
+    [29, `минут`, `минут`],
+    [30, `минут`, `минут`],
+    [31, `минут`, `минуту`],
+    [32, `минут`, `минуты`],
+    [100, `минут`, `минут`],
+    [101, `минут`, `минуту`],
+    [102, `минут`, `минуты`],
+    [1000, `минут`, `минут`],
+    [1001, `минут`, `минуту`],
+    [1002, `минут`, `минуты`]
+  ]) {
+    it(`should return right answer for ${num} ${baseWord}`, () => {
+      assert.equal(word, inflectAccusativeNumber(num, baseWord));
+    });
+  }
+});
+
+describe(`inflectAccusativeScore`, () => {
+  for (let [num, word] of [
+    [0, `баллов`],
+    [1, `балл`],
+    [2, `балла`],
+    [3, `балла`],
+    [4, `балла`],
+    [5, `баллов`],
+    [6, `баллов`],
+    [7, `баллов`],
+    [8, `баллов`],
+    [9, `баллов`],
+    [10, `баллов`],
+    [11, `баллов`],
+    [12, `баллов`],
+    [13, `баллов`],
+    [19, `баллов`],
+    [20, `баллов`],
+    [21, `балл`],
+    [22, `балла`],
+    [23, `балла`],
+    [24, `балла`],
+    [25, `баллов`],
+    [26, `баллов`],
+    [27, `баллов`],
+    [28, `баллов`],
+    [29, `баллов`],
+    [30, `баллов`],
+    [31, `балл`],
+    [32, `балла`],
+    [100, `баллов`],
+    [101, `балл`],
+    [102, `балла`],
+    [1000, `баллов`],
+    [1001, `балл`],
+    [1002, `балла`]
+  ]) {
+    it(`should return right answer for the score ${num}`, () => {
+      assert.equal(word, inflectAccusativeScore(num));
+    });
+  }
+});
+
+describe(`inflectGenitiveFast`, () => {
+  for (let [num, word] of [
+    [0, `быстрых`],
+    [1, `быстрый`],
+    [2, `быстрых`],
+    [3, `быстрых`],
+    [4, `быстрых`],
+    [5, `быстрых`],
+    [6, `быстрых`],
+    [7, `быстрых`],
+    [8, `быстрых`],
+    [9, `быстрых`],
+    [10, `быстрых`],
+    [11, `быстрых`],
+    [12, `быстрых`],
+    [20, `быстрых`],
+    [21, `быстрый`],
+    [22, `быстрых`],
+    [31, `быстрый`],
+    [101, `быстрый`],
+    [1001, `быстрый`],
+  ]) {
+    it(`should return right answer for ${num} fast answers`, () => {
+      assert.equal(word, inflectGenitiveFast(num));
+    });
+  }
+});
+
+describe(`inflectAccusativeMistake`, () => {
+  for (let [num, word] of [
+    [0, `ошибок`],
+    [1, `ошибку`],
+    [2, `ошибки`],
+    [3, `ошибки`],
+    [4, `ошибки`],
+    [5, `ошибок`],
+    [6, `ошибок`],
+    [7, `ошибок`],
+    [8, `ошибок`],
+    [9, `ошибок`],
+    [10, `ошибок`],
+    [11, `ошибок`],
+    [12, `ошибок`],
+    [13, `ошибок`],
+    [19, `ошибок`],
+    [20, `ошибок`],
+    [21, `ошибку`],
+    [22, `ошибки`],
+    [23, `ошибки`],
+    [24, `ошибки`],
+    [25, `ошибок`],
+    [26, `ошибок`],
+    [27, `ошибок`],
+    [28, `ошибок`],
+    [29, `ошибок`],
+    [30, `ошибок`],
+    [31, `ошибку`],
+    [32, `ошибки`],
+    [100, `ошибок`],
+    [101, `ошибку`],
+    [102, `ошибки`],
+    [1000, `ошибок`],
+    [1001, `ошибку`],
+    [1002, `ошибки`]
+  ]) {
+    it(`should return right answer for the score ${num}`, () => {
+      assert.equal(word, inflectAccusativeMistake(num));
     });
   }
 });

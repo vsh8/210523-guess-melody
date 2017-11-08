@@ -1,6 +1,7 @@
 import assert from 'assert';
 
-import {ResultScreen, calculateResultPoints} from './result';
+import GameResult, {calculateResultPoints} from './result-model';
+import {GameStatus} from '../data/state';
 import {getInitialGameState} from '../data/state';
 
 
@@ -261,7 +262,7 @@ const getGameState = (gameTime, answers) => {
 
 describe(`Result message getting function`, () => {
   it(`should say about timeout when no time remaining`, () => {
-    const result = ResultScreen.getResult(
+    const result = new GameResult(
         [19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(0, [
           {time: 10, isRight: true},
@@ -272,12 +273,10 @@ describe(`Result message getting function`, () => {
           {time: 15, isRight: true},
           {time: 16, isRight: true},
         ]));
-    assert.equal(result.message, `Увы и ах!`);
-    assert.equal(result.description, `Время вышло!<br>Вы не успели отгадать все мелодии.`);
-
+    assert.equal(result.gameStatus, GameStatus.TIME_LIMIT);
   });
   it(`should say that number of attempts exceeded when no attempts remaining`, () => {
-    const result = ResultScreen.getResult(
+    const result = new GameResult(
         [19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: false},
@@ -290,11 +289,10 @@ describe(`Result message getting function`, () => {
           {time: 10, isRight: true},
           {time: 10, isRight: false},
         ]));
-    assert.equal(result.message, `Какая жалость`);
-    assert.equal(result.description, `У вас закончились все попытки.<br>Ничего, повезёт в следующий раз!`);
+    assert.equal(result.gameStatus, GameStatus.WRONG_ANSWERS_LIMIT);
   });
   it(`should return right message for successful result`, () => {
-    const result1 = ResultScreen.getResult(
+    const result1 = new GameResult(
         [20, 19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -313,13 +311,16 @@ describe(`Result message getting function`, () => {
           {time: 42, isRight: true},
           {time: 42, isRight: true},
         ]));
-    assert.equal(result1.message, `Вы настоящий меломан!`);
-    assert.equal(
-        result1.description,
-        `За 04 минуты и 18 секунд<br>вы набрали 20 баллов (10 быстрых)<br>совершив 0 ошибки`);
-    assert.equal(result1.comparison, `Вы заняли 1-ое место из 10 игроков. Это лучше чем у 90% игроков.`);
+    assert.equal(result1.gameStatus, GameStatus.SUCCESS);
+    assert.equal(result1.gameTime, 258);
+    assert.equal(result1.resultPoints, 20);
+    assert.equal(result1.fastAnswersNumber, 10);
+    assert.equal(result1.wrongAnswersNumber, 0);
+    assert.equal(result1.place, 1);
+    assert.equal(result1.playersNumber, 10);
+    assert.equal(result1.worsePlayersPercent, 90);
 
-    const result2 = ResultScreen.getResult(
+    const result2 = new GameResult(
         [20, 19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -333,13 +334,16 @@ describe(`Result message getting function`, () => {
           {time: 18, isRight: true},
           {time: 30, isRight: true},
         ]));
-    assert.equal(result2.message, `Вы настоящий меломан!`);
-    assert.equal(
-        result2.description,
-        `За 04 минуты и 18 секунд<br>вы набрали 19 баллов (9 быстрых)<br>совершив 0 ошибки`);
-    assert.equal(result2.comparison, `Вы заняли 2-ое место из 10 игроков. Это лучше чем у 80% игроков.`);
+    assert.equal(result2.gameStatus, GameStatus.SUCCESS);
+    assert.equal(result2.gameTime, 258);
+    assert.equal(result2.resultPoints, 19);
+    assert.equal(result2.fastAnswersNumber, 9);
+    assert.equal(result2.wrongAnswersNumber, 0);
+    assert.equal(result2.place, 2);
+    assert.equal(result2.playersNumber, 10);
+    assert.equal(result2.worsePlayersPercent, 80);
 
-    const result3 = ResultScreen.getResult(
+    const result3 = new GameResult(
         [20, 19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -353,13 +357,16 @@ describe(`Result message getting function`, () => {
           {time: 30, isRight: true},
           {time: 30, isRight: true},
         ]));
-    assert.equal(result3.message, `Вы настоящий меломан!`);
-    assert.equal(
-        result3.description,
-        `За 04 минуты и 18 секунд<br>вы набрали 18 баллов (8 быстрых)<br>совершив 0 ошибки`);
-    assert.equal(result3.comparison, `Вы заняли 3-ье место из 10 игроков. Это лучше чем у 70% игроков.`);
+    assert.equal(result3.gameStatus, GameStatus.SUCCESS);
+    assert.equal(result3.gameTime, 258);
+    assert.equal(result3.resultPoints, 18);
+    assert.equal(result3.fastAnswersNumber, 8);
+    assert.equal(result3.wrongAnswersNumber, 0);
+    assert.equal(result3.place, 3);
+    assert.equal(result3.playersNumber, 10);
+    assert.equal(result3.worsePlayersPercent, 70);
 
-    const result4 = ResultScreen.getResult(
+    const result4 = new GameResult(
         [20, 19, 18, 16, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -373,13 +380,16 @@ describe(`Result message getting function`, () => {
           {time: 18, isRight: true},
           {time: 19, isRight: true},
         ]));
-    assert.equal(result4.message, `Вы настоящий меломан!`);
-    assert.equal(
-        result4.description,
-        `За 04 минуты и 18 секунд<br>вы набрали 16 баллов (9 быстрых)<br>совершив 1 ошибки`);
-    assert.equal(result4.comparison, `Вы заняли 4-ое место из 10 игроков. Это лучше чем у 60% игроков.`);
+    assert.equal(result4.gameStatus, GameStatus.SUCCESS);
+    assert.equal(result4.gameTime, 258);
+    assert.equal(result4.resultPoints, 16);
+    assert.equal(result4.fastAnswersNumber, 9);
+    assert.equal(result4.wrongAnswersNumber, 1);
+    assert.equal(result4.place, 4);
+    assert.equal(result4.playersNumber, 10);
+    assert.equal(result4.worsePlayersPercent, 60);
 
-    const result5 = ResultScreen.getResult(
+    const result5 = new GameResult(
         [20, 19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -393,13 +403,16 @@ describe(`Result message getting function`, () => {
           {time: 18, isRight: false},
           {time: 19, isRight: false},
         ]));
-    assert.equal(result5.message, `Вы настоящий меломан!`);
-    assert.equal(
-        result5.description,
-        `За 04 минуты и 18 секунд<br>вы набрали 6 баллов (5 быстрых)<br>совершив 3 ошибки`);
-    assert.equal(result5.comparison, `Вы заняли 9-ое место из 10 игроков. Это лучше чем у 10% игроков.`);
+    assert.equal(result5.gameStatus, GameStatus.SUCCESS);
+    assert.equal(result5.gameTime, 258);
+    assert.equal(result5.resultPoints, 6);
+    assert.equal(result5.fastAnswersNumber, 5);
+    assert.equal(result5.wrongAnswersNumber, 3);
+    assert.equal(result5.place, 9);
+    assert.equal(result5.playersNumber, 10);
+    assert.equal(result5.worsePlayersPercent, 10);
 
-    const result6 = ResultScreen.getResult(
+    const result6 = new GameResult(
         [20, 19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
@@ -413,13 +426,16 @@ describe(`Result message getting function`, () => {
           {time: 18, isRight: false},
           {time: 19, isRight: false},
         ]));
-    assert.equal(result6.message, `Вы настоящий меломан!`);
-    assert.equal(
-        result6.description,
-        `За 04 минуты и 18 секунд<br>вы набрали 5 баллов (4 быстрых)<br>совершив 3 ошибки`);
-    assert.equal(result6.comparison, `Вы заняли 10-ое место из 10 игроков. Это лучше чем у 0% игроков.`);
+    assert.equal(result6.gameStatus, GameStatus.SUCCESS);
+    assert.equal(result6.gameTime, 258);
+    assert.equal(result6.resultPoints, 5);
+    assert.equal(result6.fastAnswersNumber, 4);
+    assert.equal(result6.wrongAnswersNumber, 3);
+    assert.equal(result6.place, 10);
+    assert.equal(result6.playersNumber, 10);
+    assert.equal(result6.worsePlayersPercent, 0);
 
-    const result7 = ResultScreen.getResult(
+    const result7 = new GameResult(
         [10],
         getGameState(42, [
           {time: 27, isRight: true},
@@ -433,13 +449,16 @@ describe(`Result message getting function`, () => {
           {time: 19, isRight: true},
           {time: 64, isRight: false},
         ]));
-    assert.equal(result7.message, `Вы настоящий меломан!`);
-    assert.equal(
-        result7.description,
-        `За 04 минуты и 18 секунд<br>вы набрали 10 баллов (6 быстрых)<br>совершив 2 ошибки`);
-    assert.equal(result7.comparison, `Вы заняли 1-ое место из 1 игрока. Это лучше чем у 0% игроков.`);
+    assert.equal(result7.gameStatus, GameStatus.SUCCESS);
+    assert.equal(result7.gameTime, 258);
+    assert.equal(result7.resultPoints, 10);
+    assert.equal(result7.fastAnswersNumber, 6);
+    assert.equal(result7.wrongAnswersNumber, 2);
+    assert.equal(result7.place, 1);
+    assert.equal(result7.playersNumber, 1);
+    assert.equal(result7.worsePlayersPercent, 0);
 
-    const result8 = ResultScreen.getResult(
+    const result8 = new GameResult(
         [10, 8],
         getGameState(42, [
           {time: 27, isRight: true},
@@ -453,13 +472,16 @@ describe(`Result message getting function`, () => {
           {time: 19, isRight: true},
           {time: 64, isRight: false},
         ]));
-    assert.equal(result8.message, `Вы настоящий меломан!`);
-    assert.equal(
-        result8.description,
-        `За 04 минуты и 18 секунд<br>вы набрали 10 баллов (6 быстрых)<br>совершив 2 ошибки`);
-    assert.equal(result8.comparison, `Вы заняли 1-ое место из 2 игроков. Это лучше чем у 50% игроков.`);
+    assert.equal(result8.gameStatus, GameStatus.SUCCESS);
+    assert.equal(result8.gameTime, 258);
+    assert.equal(result8.resultPoints, 10);
+    assert.equal(result8.fastAnswersNumber, 6);
+    assert.equal(result8.wrongAnswersNumber, 2);
+    assert.equal(result8.place, 1);
+    assert.equal(result8.playersNumber, 2);
+    assert.equal(result8.worsePlayersPercent, 50);
 
-    const result9 = ResultScreen.getResult(
+    const result9 = new GameResult(
         [8, 10, 20],
         getGameState(42, [
           {time: 27, isRight: true},
@@ -473,10 +495,13 @@ describe(`Result message getting function`, () => {
           {time: 19, isRight: true},
           {time: 64, isRight: false},
         ]));
-    assert.equal(result9.message, `Вы настоящий меломан!`);
-    assert.equal(
-        result9.description,
-        `За 04 минуты и 18 секунд<br>вы набрали 10 баллов (6 быстрых)<br>совершив 2 ошибки`);
-    assert.equal(result9.comparison, `Вы заняли 2-ое место из 3 игроков. Это лучше чем у 33.33% игроков.`);
+    assert.equal(result9.gameStatus, GameStatus.SUCCESS);
+    assert.equal(result9.gameTime, 258);
+    assert.equal(result9.resultPoints, 10);
+    assert.equal(result9.fastAnswersNumber, 6);
+    assert.equal(result9.wrongAnswersNumber, 2);
+    assert.equal(result9.place, 2);
+    assert.equal(result9.playersNumber, 3);
+    assert.equal(result9.worsePlayersPercent, 33.33);
   });
 });

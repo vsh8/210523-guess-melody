@@ -12,13 +12,13 @@ export const chooseRandomItems = (items, numberOfItemsToChoose) => {
   }
 
   const itemsToChoose = items.slice();
-  const choosedItems = [];
+  const chosenItems = [];
 
   for (let i = 0; i < numberOfItemsToChoose; i++) {
     const itemIndex = getRandomInteger(itemsToChoose.length);
-    choosedItems.push(itemsToChoose[itemIndex]);
+    chosenItems.push(itemsToChoose[itemIndex]);
     itemsToChoose.splice(itemIndex, 1);
   }
 
-  return choosedItems;
+  return chosenItems;
 };

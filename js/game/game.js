@@ -23,11 +23,8 @@ export default class GameScreen {
   changeLevel() {
     this.model.resetQuestionStartTime();
 
-    if (this.model.currentQuestion instanceof ArtistQuestion) {
-      this.view = new LevelArtistView(this.model);
-    } else {
-      this.view = new LevelGenreView(this.model);
-    }
+    const ViewClass = this.model.currentQuestion instanceof ArtistQuestion ? LevelArtistView : LevelGenreView;
+    this.view = new ViewClass(this.model);
 
     showView(this.view);
     this.view.onAnswer = (answer) => this.onAnswer(answer);
