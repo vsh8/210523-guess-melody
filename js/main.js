@@ -1,4 +1,4 @@
-import splashScreen from './splash/splash';
+import splashScreen from './splash/splash-screen';
 
 
 splashScreen.init();

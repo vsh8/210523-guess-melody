@@ -1,6 +1,6 @@
-import welcomeScreen from './welcome/welcome';
-import GameScreen from './game/game';
-import resultScreen from './result/result';
+import welcomeScreen from './welcome/welcome-screen';
+import GameScreen from './game/game-screen';
+import resultScreen from './result/result-screen';
 import {calculateResultPoints} from './result/result-model';
 
 import GameState, {getInitialGameState} from './data/game-state';
