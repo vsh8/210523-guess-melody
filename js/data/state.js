@@ -8,7 +8,11 @@ export const FAST_ANSWER_THRESHOLD = 30;
 
 export class GameState {
   constructor(time, answers) {
-    this.gameTimer = createTimer(time || TIME_LIMIT);
+    if (time || time === 0) {
+      this.gameTimer = createTimer(time);
+    } else {
+      this.gameTimer = createTimer(TIME_LIMIT);
+    }
     this.answers = answers || [];
   }
 

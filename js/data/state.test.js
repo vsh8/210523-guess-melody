@@ -1,6 +1,6 @@
 import assert from 'assert';
 
-import {getInitialGameState, TIME_LIMIT, GameStatus, getGameStatus} from './state';
+import {getInitialGameState, TIME_LIMIT, GameState, GameStatus, getGameStatus} from './state';
 
 
 const getGameState = (gameTime, answers) => {
@@ -10,6 +10,13 @@ const getGameState = (gameTime, answers) => {
   return gameState;
 };
 
+
+describe(`GameState`, () => {
+  it(`should be able to create a game state with zero timer`, () => {
+    const gameState = new GameState(0, []);
+    assert.equal(gameState.time, 0);
+  });
+});
 
 describe(`getInitialGameState`, () => {
   it(`should return a valid initial state`, () => {
