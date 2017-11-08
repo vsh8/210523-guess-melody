@@ -31,6 +31,10 @@ const loadState = (dataString) => {
 // Здесь намеренно был использован синглтон, на то он и называется Application,
 // теперь же пришлось экземпляр Application протаскивать во все контроллеры.
 export default class Application {
+  static create(questions) {
+    return new Application(questions);
+  }
+
   constructor(questions) {
     this.routes = {
       [ControllerId.WELCOME]: welcomeScreen,
