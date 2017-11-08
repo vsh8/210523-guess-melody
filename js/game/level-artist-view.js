@@ -92,7 +92,7 @@ export default class LevelArtistView extends LevelView {
     const playerButton = playerElement.querySelector(`button`);
 
     playerButton.classList.remove(`player-control--pause`);
-    playerButton.target.classList.add(`player-control--play`);
+    playerButton.classList.add(`player-control--play`);
     playerAudio.pause();
   }
 
