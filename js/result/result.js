@@ -76,9 +76,9 @@ export class ResultScreen {
           place++;
         }
 
-        let i = place + 1;
-        let n = statistics.length + 1;
-        let p = Math.round((statistics.length - place) / (statistics.length + 1) * 10000) / 100;
+        let i = place;
+        let n = statistics.length;
+        let p = Math.round((statistics.length - place) / statistics.length * 10000) / 100;
 
         return {
           message: `Вы настоящий меломан!`,

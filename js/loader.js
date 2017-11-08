@@ -1,6 +1,6 @@
 const SERVER_URL = `https://es.dump.academy/guess-melody`;
 
-const DEFAULT_NAME = `vsh`;
+const DEFAULT_NAME = `vsh8`;
 
 export default class Loader {
   static loadData() {

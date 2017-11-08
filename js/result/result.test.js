@@ -295,7 +295,7 @@ describe(`Result message getting function`, () => {
   });
   it(`should return right message for successful result`, () => {
     const result1 = ResultScreen.getResult(
-        [19, 18, 14, 10, 5, 6, 7, 12, 8],
+        [20, 19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
           {time: 10, isRight: true},
@@ -320,7 +320,7 @@ describe(`Result message getting function`, () => {
     assert.equal(result1.comparison, `Вы заняли 1-ое место из 10 игроков. Это лучше чем у 90% игроков.`);
 
     const result2 = ResultScreen.getResult(
-        [19, 18, 14, 10, 5, 6, 7, 12, 8],
+        [20, 19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
           {time: 11, isRight: true},
@@ -340,7 +340,7 @@ describe(`Result message getting function`, () => {
     assert.equal(result2.comparison, `Вы заняли 2-ое место из 10 игроков. Это лучше чем у 80% игроков.`);
 
     const result3 = ResultScreen.getResult(
-        [19, 18, 14, 10, 5, 6, 7, 12, 8],
+        [20, 19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
           {time: 11, isRight: true},
@@ -360,7 +360,7 @@ describe(`Result message getting function`, () => {
     assert.equal(result3.comparison, `Вы заняли 3-ье место из 10 игроков. Это лучше чем у 70% игроков.`);
 
     const result4 = ResultScreen.getResult(
-        [19, 18, 14, 10, 5, 6, 7, 12, 8],
+        [20, 19, 18, 16, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
           {time: 11, isRight: true},
@@ -377,10 +377,10 @@ describe(`Result message getting function`, () => {
     assert.equal(
         result4.description,
         `За 04 минуты и 18 секунд<br>вы набрали 16 баллов (9 быстрых)<br>совершив 1 ошибки`);
-    assert.equal(result4.comparison, `Вы заняли 3-ье место из 10 игроков. Это лучше чем у 70% игроков.`);
+    assert.equal(result4.comparison, `Вы заняли 4-ое место из 10 игроков. Это лучше чем у 60% игроков.`);
 
     const result5 = ResultScreen.getResult(
-        [19, 18, 14, 10, 5, 6, 7, 12, 8],
+        [20, 19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
           {time: 11, isRight: true},
@@ -400,7 +400,7 @@ describe(`Result message getting function`, () => {
     assert.equal(result5.comparison, `Вы заняли 9-ое место из 10 игроков. Это лучше чем у 10% игроков.`);
 
     const result6 = ResultScreen.getResult(
-        [19, 18, 14, 10, 5, 6, 7, 12, 8],
+        [20, 19, 18, 14, 10, 5, 6, 7, 12, 8],
         getGameState(42, [
           {time: 10, isRight: true},
           {time: 11, isRight: true},
@@ -420,7 +420,7 @@ describe(`Result message getting function`, () => {
     assert.equal(result6.comparison, `Вы заняли 10-ое место из 10 игроков. Это лучше чем у 0% игроков.`);
 
     const result7 = ResultScreen.getResult(
-        [],
+        [10],
         getGameState(42, [
           {time: 27, isRight: true},
           {time: 42, isRight: true},
@@ -440,7 +440,7 @@ describe(`Result message getting function`, () => {
     assert.equal(result7.comparison, `Вы заняли 1-ое место из 1 игрока. Это лучше чем у 0% игроков.`);
 
     const result8 = ResultScreen.getResult(
-        [8],
+        [10, 8],
         getGameState(42, [
           {time: 27, isRight: true},
           {time: 42, isRight: true},
@@ -460,7 +460,7 @@ describe(`Result message getting function`, () => {
     assert.equal(result8.comparison, `Вы заняли 1-ое место из 2 игроков. Это лучше чем у 50% игроков.`);
 
     const result9 = ResultScreen.getResult(
-        [8, 20],
+        [8, 10, 20],
         getGameState(42, [
           {time: 27, isRight: true},
           {time: 42, isRight: true},
