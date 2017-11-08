@@ -46,9 +46,9 @@ export default class LevelArtistView extends LevelView {
     this.element.querySelector(`.player`).addEventListener(`click`, (evt) => {
       if (evt.target.classList.contains(`player-control`)) {
         if (this.isAudioPlaying()) {
-          this.playAudio();
-        } else {
           this.pauseAudio();
+        } else {
+          this.playAudio();
         }
       }
     });
@@ -62,7 +62,7 @@ export default class LevelArtistView extends LevelView {
   }
 
   isAudioPlaying() {
-    return this.playerButton.classList.contains(`player-control--play`);
+    return this.playerButton.classList.contains(`player-control--pause`);
   }
 
   pauseAudio() {

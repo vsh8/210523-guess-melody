@@ -1,13 +1,12 @@
-import App from '../application';
 import {showView} from '../util';
 
 import LevelArtistView from './level-artist-view';
 import LevelGenreView from './level-genre-view';
 import GameModel from './game-model';
 
-import loadQuestion from '../data/questions';
+import loadQuestion from '../data/load-question';
 import ArtistQuestion from '../data/artist-question';
-import {GameStatus} from '../data/state';
+import {GameStatus} from '../data/game-state';
 
 
 export default class GameScreen {
@@ -15,7 +14,8 @@ export default class GameScreen {
     this.questions = questions.map((question) => loadQuestion(question));
   }
 
-  init(gameState) {
+  init(app, gameState) {
+    this.app = app;
     this.model = new GameModel(this.questions, gameState);
     this.changeLevel();
   }
@@ -37,16 +37,16 @@ export default class GameScreen {
     this.stopTimer();
 
     if (this.model.gameStatus === GameStatus.IN_PROGRESS) {
-      App.showGame(this.model.state);
+      this.app.showGame(this.model.state);
     } else {
-      App.showStats(this.model.state);
+      this.app.showStats(this.model.state);
     }
   }
 
   tick() {
     const timeout = !this.model.tick();
     if (timeout) {
-      App.showStats(this.model.state);
+      this.app.showStats(this.model.state);
     } else {
       this.view.updateTimer(this.model.time);
       this.timer = setTimeout(() => this.tick(), 1000);

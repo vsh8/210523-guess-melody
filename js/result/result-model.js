@@ -1,5 +1,5 @@
-import {GameStatus, getGameStatus} from '../data/state';
-import {WRONG_ANSWERS_THRESHOLD, TIME_LIMIT, FAST_ANSWER_THRESHOLD} from '../data/state';
+import {GameStatus, getGameStatus,
+  WRONG_ANSWERS_THRESHOLD, TIME_LIMIT, FAST_ANSWER_THRESHOLD} from '../data/game-state';
 
 
 export const calculateResultPoints = (answers, gameTime) => {

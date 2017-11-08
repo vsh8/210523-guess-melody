@@ -1,8 +1,7 @@
 import assert from 'assert';
 
 import GameResult, {calculateResultPoints} from './result-model';
-import {GameStatus} from '../data/state';
-import {getInitialGameState} from '../data/state';
+import {getInitialGameState, GameStatus} from '../data/game-state';
 
 
 describe(`Result points calculation function`, () => {

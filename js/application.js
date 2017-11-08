@@ -3,7 +3,7 @@ import GameScreen from './game/game';
 import resultScreen from './result/result';
 import {calculateResultPoints} from './result/result-model';
 
-import GameState, {getInitialGameState} from './data/state';
+import GameState, {getInitialGameState} from './data/game-state';
 
 import Loader from './loader';
 
@@ -28,37 +28,39 @@ const loadState = (dataString) => {
 };
 
 
+// Здесь намеренно был использован синглтон, на то он и называется Application,
+// теперь же пришлось экземпляр Application протаскивать во все контроллеры.
 export default class Application {
-  static init(questions) {
-    Application.routes = {
+  constructor(questions) {
+    this.routes = {
       [ControllerId.WELCOME]: welcomeScreen,
       [ControllerId.GAME]: new GameScreen(questions),
       [ControllerId.RESULT]: resultScreen
     };
 
-    window.addEventListener(`hashchange`, () => Application.changeHash());
-    Application.changeHash();
+    window.addEventListener(`hashchange`, () => this.changeHash());
+    this.changeHash();
   }
 
-  static changeHash() {
+  changeHash() {
     const hashValue = location.hash.replace(`#`, ``);
     const [id, data] = hashValue.split(`?`);
 
     const controller = this.routes[id];
     if (controller) {
-      controller.init(loadState(data));
+      controller.init(this, loadState(data));
     }
   }
 
-  static showWelcome() {
+  showWelcome() {
     location.hash = ControllerId.WELCOME;
   }
 
-  static showGame(state) {
+  showGame(state) {
     location.hash = `${ControllerId.GAME}?${dumpState(state)}`;
   }
 
-  static showStats(state) {
+  showStats(state) {
     Loader.saveResults({points: calculateResultPoints(state.answers, state.time)}).then(() => {
       location.hash = `${ControllerId.RESULT}?${dumpState(state)}`;
     });

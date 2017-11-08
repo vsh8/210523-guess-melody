@@ -23,7 +23,7 @@ export default class LevelGenreView extends LevelView {
     return `
       <div class="genre-answer">
         <div class="player-wrapper">
-          <div class="player">
+          <div class="player player-${idx}">
             <audio src="${song.src}"></audio>
             <button class="player-control player-control--play"></button>
             <div class="player-track">
@@ -40,21 +40,30 @@ export default class LevelGenreView extends LevelView {
   bind() {
     super.bind();
 
+    this.players = Array.from(this.element.querySelectorAll(`.player`)).map(
+        (playerElement) => ({
+          playerAudio: playerElement.querySelector(`audio`),
+          playerButton: playerElement.querySelector(`.player-control`)
+        }));
+
     this.element.querySelector(`.genre`).addEventListener(`click`, (evt) => {
       if (evt.target.classList.contains(`player-control`)) {
         evt.preventDefault();
 
-        const playerAudio = evt.target.parentElement;
-        if (evt.target.classList.contains(`player-control--play`)) {
-          const playingAudioButton = this.element.querySelector(`.player-control--pause`);
-          if (playingAudioButton) {
-            const playingPlayerElement = playingAudioButton.parentElement;
-            this.pauseAudio(playingPlayerElement);
+        const playerIndex = this.playerIndex(evt.target.parentElement);
+        if (this.isAudioPlaying(playerIndex)) {
+          // Pause clicked audio.
+          this.pauseAudio(playerIndex);
+        } else {
+          // Pause currently playing audio.
+          for (let i = 0; i < this.players.length; i++) {
+            if (this.isAudioPlaying(i)) {
+              this.pauseAudio(i);
+            }
           }
 
-          this.playAudio(playerAudio);
-        } else {
-          this.pauseAudio(playerAudio);
+          // Play clicked audio.
+          this.playAudio(playerIndex);
         }
       }
     });
@@ -80,18 +89,34 @@ export default class LevelGenreView extends LevelView {
     });
   }
 
-  pauseAudio(playerElement) {
-    const playerAudio = playerElement.querySelector(`audio`);
-    const playerButton = playerElement.querySelector(`button`);
+  playerIndex(playerElement) {
+    for (let i = 0; i < playerElement.classList.length; ++i) {
+      const cls = playerElement.classList[i];
+      if (cls.substr(0, 7) === `player-`) {
+        return parseInt(cls.substr(7), 10);
+      }
+    }
+    return -1;
+  }
+
+  isAudioPlaying(playerIndex) {
+    const playerButton = this.players[playerIndex].playerButton;
+
+    return playerButton.classList.contains(`player-control--pause`);
+  }
+
+  pauseAudio(playerIndex) {
+    const playerAudio = this.players[playerIndex].playerAudio;
+    const playerButton = this.players[playerIndex].playerButton;
 
     playerButton.classList.remove(`player-control--pause`);
     playerButton.classList.add(`player-control--play`);
     playerAudio.pause();
   }
 
-  playAudio(playerElement) {
-    const playerAudio = playerElement.querySelector(`audio`);
-    const playerButton = playerElement.querySelector(`button`);
+  playAudio(playerIndex) {
+    const playerAudio = this.players[playerIndex].playerAudio;
+    const playerButton = this.players[playerIndex].playerButton;
 
     playerButton.classList.remove(`player-control--play`);
     playerButton.classList.add(`player-control--pause`);

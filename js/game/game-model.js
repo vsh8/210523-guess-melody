@@ -1,4 +1,4 @@
-import {getGameStatus} from '../data/state';
+import {getGameStatus} from '../data/game-state';
 
 
 export default class GameModel {

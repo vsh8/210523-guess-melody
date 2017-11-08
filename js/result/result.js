@@ -1,4 +1,3 @@
-import App from '../application';
 import {showView} from '../util';
 
 import ResultView from './result-view';
@@ -8,7 +7,7 @@ import Loader from '../loader';
 
 
 export class ResultScreen {
-  init(gameState) {
+  init(app, gameState) {
     Loader.loadResults().then((results) => {
       const statistics = results.map((result) => result.points);
       const gameResult = new GameResult(statistics, gameState);
@@ -16,7 +15,7 @@ export class ResultScreen {
       this.view = new ResultView(gameResult);
       showView(this.view);
       this.view.onNewGame = () => {
-        App.showWelcome();
+        app.showWelcome();
       };
     });
   }

@@ -13,7 +13,7 @@ class SplashScreen {
     this.view.start();
 
     Loader.loadData()
-        .then((questions) => App.init(questions))
+        .then((questions) => new App(questions))
         .then(() => this.view.stop())
         .catch(window.console.error);
   }

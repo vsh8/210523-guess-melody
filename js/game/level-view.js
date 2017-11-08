@@ -1,6 +1,6 @@
 import AbstractView from '../view';
 import {timeMinutes, timeSeconds, getVisualTimerCircleLength} from '../timer';
-import {TIME_LIMIT} from '../data/state';
+import {TIME_LIMIT} from '../data/game-state';
 
 
 export default class LevelView extends AbstractView {

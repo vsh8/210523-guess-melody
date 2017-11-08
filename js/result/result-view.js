@@ -1,7 +1,7 @@
 import AbstractView from '../view';
 
 import {timeMinutes, timeSeconds} from '../timer';
-import {GameStatus} from '../data/state';
+import {GameStatus} from '../data/game-state';
 
 import {inflectSingularNominativeNeuterNumber, inflectGenitivePlayer, inflectAccusativeNumber,
   inflectAccusativeScore, inflectGenitiveFast, inflectAccusativeMistake} from '../rulang';

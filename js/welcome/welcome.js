@@ -1,17 +1,16 @@
-import App from '../application';
 import {showView} from '../util';
 
 import WelcomeView from './welcome-view';
 
-import {getInitialGameState} from '../data/state';
+import {getInitialGameState} from '../data/game-state';
 
 
 class WelcomeScreen {
-  init() {
+  init(app) {
     this.view = new WelcomeView();
     showView(this.view);
     this.view.onStart = () => {
-      App.showGame(getInitialGameState());
+      app.showGame(getInitialGameState());
     };
   }
 }
