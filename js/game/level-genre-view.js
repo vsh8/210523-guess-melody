@@ -24,7 +24,7 @@ export default class LevelGenreView extends LevelView {
       <div class="genre-answer">
         <div class="player-wrapper">
           <div class="player player-${idx}">
-            <audio src="${song.src}"></audio>
+            <audio src="${song.src}" preload="none"></audio>
             <button class="player-control player-control--play"></button>
             <div class="player-track">
               <span class="player-status"></span>
@@ -56,11 +56,7 @@ export default class LevelGenreView extends LevelView {
           this.pauseAudio(playerIndex);
         } else {
           // Pause currently playing audio.
-          for (let i = 0; i < this.players.length; i++) {
-            if (this.isAudioPlaying(i)) {
-              this.pauseAudio(i);
-            }
-          }
+          this.pauseAllAudio();
 
           // Play clicked audio.
           this.playAudio(playerIndex);
@@ -80,6 +76,7 @@ export default class LevelGenreView extends LevelView {
 
     genreAnswerSendButton.addEventListener(`click`, (evt) => {
       evt.preventDefault();
+      this.pauseAllAudio();
 
       const selectedSongs = [];
       genreForm.querySelectorAll(`.genre-answer-cb:checked`).forEach(
@@ -111,7 +108,7 @@ export default class LevelGenreView extends LevelView {
 
     playerButton.classList.remove(`player-control--pause`);
     playerButton.classList.add(`player-control--play`);
-    playerAudio.pause();
+    this.model.loadedAudio[playerAudio.src].pause();
   }
 
   playAudio(playerIndex) {
@@ -120,7 +117,15 @@ export default class LevelGenreView extends LevelView {
 
     playerButton.classList.remove(`player-control--play`);
     playerButton.classList.add(`player-control--pause`);
-    playerAudio.play();
+    this.model.loadedAudio[playerAudio.src].play();
+  }
+
+  pauseAllAudio() {
+    for (let i = 0; i < this.players.length; i++) {
+      if (this.isAudioPlaying(i)) {
+        this.pauseAudio(i);
+      }
+    }
   }
 
   // onAnswer(answer) {}

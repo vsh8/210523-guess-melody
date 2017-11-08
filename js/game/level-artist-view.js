@@ -13,8 +13,8 @@ export default class LevelArtistView extends LevelView {
       <h2 class="title main-title">${this.model.currentQuestion.question}</h2>
       <div class="player-wrapper">
         <div class="player">
-          <audio src="${this.model.currentQuestion.songSrc}" autoplay></audio>
-          <button class="player-control player-control--pause"></button>
+          <audio src="${this.model.currentQuestion.songSrc}" preload="none"></audio>
+          <button class="player-control player-control--play"></button>
           <div class="player-track">
             <span class="player-status"></span>
           </div>
@@ -43,6 +43,8 @@ export default class LevelArtistView extends LevelView {
     this.playerAudio = this.element.querySelector(`audio`);
     this.playerButton = this.element.querySelector(`.player-control`);
 
+    this.playAudio();
+
     this.element.querySelector(`.player`).addEventListener(`click`, (evt) => {
       if (evt.target.classList.contains(`player-control`)) {
         if (this.isAudioPlaying()) {
@@ -56,6 +58,8 @@ export default class LevelArtistView extends LevelView {
     this.element.querySelector(`.main-list`).addEventListener(`click`, (evt) => {
       if (evt.target.classList.contains(`main-answer-r`)) {
         evt.preventDefault();
+        this.pauseAudio();
+
         this.onAnswer(evt.target.value);
       }
     });
@@ -68,13 +72,13 @@ export default class LevelArtistView extends LevelView {
   pauseAudio() {
     this.playerButton.classList.remove(`player-control--pause`);
     this.playerButton.classList.add(`player-control--play`);
-    this.playerAudio.pause();
+    this.model.loadedAudio[this.playerAudio.src].pause();
   }
 
   playAudio() {
     this.playerButton.classList.remove(`player-control--play`);
     this.playerButton.classList.add(`player-control--pause`);
-    this.playerAudio.play();
+    this.model.loadedAudio[this.playerAudio.src].play();
   }
 
   // onAnswer(answer) {}

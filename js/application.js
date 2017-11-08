@@ -31,14 +31,14 @@ const loadState = (dataString) => {
 // Здесь намеренно был использован синглтон, на то он и называется Application,
 // теперь же пришлось экземпляр Application протаскивать во все контроллеры.
 export default class Application {
-  static create(questions) {
-    return new Application(questions);
+  static create(questions, loadedAudio) {
+    return new Application(questions, loadedAudio);
   }
 
-  constructor(questions) {
+  constructor(questions, loadedAudio) {
     this.routes = {
       [ControllerId.WELCOME]: welcomeScreen,
-      [ControllerId.GAME]: new GameScreen(questions),
+      [ControllerId.GAME]: new GameScreen(questions, loadedAudio),
       [ControllerId.RESULT]: resultScreen
     };
 

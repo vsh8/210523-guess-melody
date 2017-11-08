@@ -2,8 +2,9 @@ import {getGameStatus} from '../data/game-state';
 
 
 export default class GameModel {
-  constructor(questions, state) {
+  constructor(questions, loadedAudio, state) {
     this.questions = questions;
+    this.loadedAudio = loadedAudio;
     this.state = state;
   }
 

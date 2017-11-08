@@ -10,13 +10,14 @@ import {GameStatus} from '../data/game-state';
 
 
 export default class GameScreen {
-  constructor(questions) {
+  constructor(questions, loadedAudio) {
     this.questions = questions.map((question) => loadQuestion(question));
+    this.loadedAudio = loadedAudio;
   }
 
   init(app, gameState) {
     this.app = app;
-    this.model = new GameModel(this.questions, gameState);
+    this.model = new GameModel(this.questions, this.loadedAudio, gameState);
     this.changeLevel();
   }
 
